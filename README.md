@@ -12,9 +12,9 @@
 
 <p align="center">
   <a href="https://github.com/ividjs/ivid/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/license-Apache2-2b18ff.svg?longCache=true" alt="license-apache-2">
+    <img src="https://img.shields.io/badge/license-Apache2-blue.svg?longCache=true" alt="license-apache-2">
   </a>
   <a href="https://www.patreon.com/bePatron?u=10700791">
-    <img src="https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F-donate-ff2018.svg?longCache=true" alt="donate">
+    <img src="https://img.shields.io/badge/%E2%9D%A4%EF%B8%8F-donate-red.svg?longCache=true" alt="donate">
   </a>
 </p>
