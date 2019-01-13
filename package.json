@@ -1,0 +1,39 @@
+{
+  "name": "ivid",
+  "version": "1.0.0",
+  "main": "./src/index.js",
+  "scripts": {
+    "dev": "npm run build && cp ./dist/ivid.js ./sample/lib/ && nodemon ./sample/server.js",
+    "build": "webpack --config webpack.config.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-loader": "^8.0.4",
+    "nanoid": "^2.0.0",
+    "node-static": "^0.7.11",
+    "path": "^0.12.7",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.1.2"
+  },
+  "description": "interactive video wrapper",
+  "keywords": [
+    "ivid",
+    "interactive",
+    "video",
+    "player",
+    "wrapper",
+    "webcomponent",
+    "js"
+  ],
+  "author": "Alex Perez (alxpez)",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/ividjs/ivid#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ividjs/ivid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ividjs/ivid/issues"
+  }
+}
