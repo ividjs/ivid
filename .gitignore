@@ -1,3 +1,5 @@
 /node_modules
 *-lock.json
+*.lock
 *.mp4
+.vscode
