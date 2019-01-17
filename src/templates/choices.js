@@ -24,7 +24,7 @@ const setupChoicesTemplate = () => {
 /**
  * @param {HTMLElement} choicesTpl 
  * @param {Object} videoItem 
- * @param {Function} selectCallback 
+ * @param {Function} choiceClickCallback 
  */
 const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
   const choices = videoItem.options.choices;

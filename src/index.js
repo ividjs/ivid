@@ -17,6 +17,7 @@
 import './style.css';
 import { toggleFullScreen } from './helpers/fullscreen';
 import { setupBaseTemplate } from './templates/base';
+import { setupControlsTemplate } from './templates/controls';
 import { setupVideoTemplate, renderVideoTemplate} from './templates/video';
 import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices';
 
@@ -29,11 +30,9 @@ class Ivid extends HTMLElement {
   constructor() {
     super();
 
-    let initState = this.setup();
-
     Object.defineProperties(this, {
       state: {
-        value: initState,
+        value: this.setup(),
         writable: true
       },
       setState: {
@@ -44,26 +43,56 @@ class Ivid extends HTMLElement {
           this.render();
         }
       },
-      onVideoEnded: {
-        value: () => {
-          let s = this.state;
-          if(!s.next) return;
 
-          this.setAttribute('current', s.next);
-          if(s.videoAttrs.controls) s.videoTemplate.controls = true;
-          s.choicesTemplate.classList.add('hidden');
+      // IVID events
+      onProgressClick: {
+        value: (event) => {
+          let video = this.state.videoTemplate;
+          let prog = event.target;
+          let pos = (event.pageX  - (prog.offsetLeft + prog.offsetParent.offsetLeft)) / prog.offsetWidth;
+          video.currentTime = pos * video.duration;
+        }
+      },
+      onPlayClick: {
+        value: (event) => {
+          this.onVideoClick();
+          let pBtn = event.target;
+        }
+      },
+      onVolumeClick: {
+        value: (event) => {
+          let video = this.state.videoTemplate;
+          let vBtn = event.target;
+        }
+      },
+      onVolumeHover: {
+        value: (event) => {
+          let video = this.state.videoTemplate;
+          let vBtn = event.target;
+        }
+      },
+      onVolumeLeave: {
+        value: (event) => {
+          let video = this.state.videoTemplate;
+          let vBtn = event.target;
+        }
+      },
+      onVolumeChange: {
+        value: (event) => {
+          let video = this.state.videoTemplate;
+          let vSlider = event.target;
+        }
+      },
+      onFullscreenClick: {
+        value: (event) => {
+          toggleFullScreen();
+          let fSBtn = event.target;
         }
       },
       onVideoClick: {
         value: () => {
           let video = this.state.videoTemplate;
           video.paused ? video.play() : video.pause();
-        }
-      },
-      onChoiceSelected: {
-        value: (choiceUid) => {
-          this.setAttribute('next', choiceUid);
-          this.state.next = choiceUid;
         }
       },
       onTimeUpdate: {
@@ -74,10 +103,25 @@ class Ivid extends HTMLElement {
           let videoTpl = s.videoTemplate;
         
           if (videoTpl.duration - videoTpl.currentTime <= countdown) {
-            videoTpl.ontimeupdate = null;
-            if(s.videoAttrs.controls) videoTpl.controls = false;
+            if(s.videoAttrs.controls) s.controlsTemplate.classList.add('hidden');
             s.choicesTemplate.classList.remove('hidden');
           }
+        }
+      },
+      onVideoEnded: {
+        value: () => {
+          let s = this.state;
+          if(!s.next) return;
+
+          this.setAttribute('current', s.next);
+          if(s.videoAttrs.controls) s.controlsTemplate.classList.remove('hidden');
+          s.choicesTemplate.classList.add('hidden');
+        }
+      },
+      onChoiceSelected: {
+        value: (choiceUid) => {
+          this.setAttribute('next', choiceUid);
+          this.state.next = choiceUid;
         }
       },
       onKeydown: {
@@ -113,33 +157,44 @@ class Ivid extends HTMLElement {
     
     // IVID specific attrubutes
     let srcmap = JSON.parse(this.getAttribute('srcmap'));
-    let current = this.getAttribute('current');
     let next = this.getAttribute('next') || '';
-
-    // HTMLElements - IVID skeleton
-    let baseTemplate = setupBaseTemplate();
-    let choicesTemplate = setupChoicesTemplate();
-    let videoTemplate = setupVideoTemplate(this.firstElementChild);
-
-    // Renders the component skeleton
-    this.innerHTML = '';
-    baseTemplate.appendChild(videoTemplate);
-    baseTemplate.appendChild(choicesTemplate);
-    this.appendChild(baseTemplate);
+    let current = this.getAttribute('current');
 
     if (!current) {
       current = Object.keys(srcmap)[0];
       this.setAttribute('current', current);
     }
 
+    // HTMLElements - IVID skeleton
+    let baseTemplate = setupBaseTemplate();
+    let videoTemplate = setupVideoTemplate(this.firstElementChild);
+    let choicesTemplate = setupChoicesTemplate();
+    let controls = setupControlsTemplate(
+      onProgressClick,
+      onPlayClick,
+      onVolumeClick,
+      onVolumeHover,
+      onVolumeLeave,
+      onVolumeChange,
+      onFullscreenClick
+    );
+
+    // Renders the component skeleton
+    this.innerHTML = '';
+    baseTemplate.appendChild(videoTemplate);
+    baseTemplate.appendChild(choicesTemplate);
+    baseTemplate.appendChild(controls.controlsTemplate);
+    this.appendChild(baseTemplate);
+
     return {
       videoAttrs,
       srcmap,
-      current,
       next,
+      current,
       baseTemplate,
       videoTemplate,
       choicesTemplate,
+      controls,
     }
   }
 

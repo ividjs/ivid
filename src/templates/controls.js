@@ -15,21 +15,44 @@
  */
 
 
-const setupControlsTemplate = () => {
-  let wrapper = document.createElement('div');
-  wrapper.setAttribute('class', 'ivid__ctrls-wrapper');
+ /**
+  * @param {Function} progressClickCallback 
+  * @param {Function} playClickCallback 
+  * @param {Function} volumeClickCallback 
+  * @param {Function} volumeHoverCallback 
+  * @param {Function} volumeLeaveCallback 
+  * @param {Function} volumeChangeCallback 
+  * @param {Function} fullscreenClickCallback 
+  */
+const setupControlsTemplate = (
+  progressClickCallback,
+  playClickCallback,
+  volumeClickCallback,
+  volumeHoverCallback,
+  volumeLeaveCallback,
+  volumeChangeCallback,
+  fullscreenClickCallback
+) => {
+
+  let controlsTemplate = document.createElement('div');
+  controlsTemplate.setAttribute('class', 'ivid__ctrls-wrapper');
 
   let progress = document.createElement('progress');
   progress.setAttribute('class', 'ivid__ctrls-progress');
+  progress.onclick = (e) => progressClickCallback(e);
 
   let buttonsWraper = document.createElement('div');
   buttonsWraper.setAttribute('class', 'ivid__ctrls-buttons-wrapper');
 
   let playButton = document.createElement('button');
   playButton.setAttribute('class', 'ivid__ctrls-button ivid__ctrls-button--play');
+  progress.onclick = (e) => playClickCallback(e);
 
   let volumeButton = document.createElement('button');
   volumeButton.setAttribute('class', 'ivid__ctrls-button ivid__ctrls-button--volume');
+  progress.onmouseover = (e) => volumeHoverCallback(e);
+  progress.onmouseleave = (e) => volumeLeaveCallback(e);
+  progress.onclick = (e) => volumeClickCallback(e);
 
   let volumeSlider = document.createElement('input');
   volumeSlider.setAttribute('class', 'ivid__ctrls-volume');
@@ -45,17 +68,27 @@ const setupControlsTemplate = () => {
 
   let fullscreenButton = document.createElement('button');
   fullscreenButton.setAttribute('class', 'ivid__ctrls-button ivid__ctrls-button--fullscreen');
+  fullscreenButton.onclick = (e) => fullscreenClickCallback(e);
 
+  // Contruct the template
   buttonsWraper.appendChild(playButton);
   buttonsWraper.appendChild(volumeButton);
   buttonsWraper.appendChild(volumeSlider);
   buttonsWraper.appendChild(spacer);
   buttonsWraper.appendChild(fullscreenButton);
 
-  wrapper.appendChild(progress);
-  wrapper.appendChild(buttonsWraper);
+  controlsTemplate.appendChild(progress);
+  controlsTemplate.appendChild(buttonsWraper);
 
-  return wrapper;
+  // An object holding the single elements of the controlsTemplate
+  return controls = {
+    controlsTemplate,
+    progress,
+    playButton,
+    volumeButton,
+    volumeSlider,
+    fullscreenButton,
+  };
 }
 
 

@@ -35,15 +35,14 @@ const setupVideoTemplate = (videoTpl) => {
 const renderVideoTemplate = (videoTpl, videoAttrs, videoItem, videoClickCallback, videoEndCallback, timeUpdateCallback) => {
   videoTpl.id = videoItem.uid;
   videoTpl.src = videoItem.src;
-  videoTpl.onclick = () => videoClickCallback();
-
   if(videoAttrs.autoplay) videoTpl.autoplay = true;
-  if(videoAttrs.controls) videoTpl.controls = true;
+  // if(videoAttrs.controls) videoTpl.controls = true;
   if(videoAttrs.muted) videoTpl.muted = true;
   if(videoAttrs.playsinline) videoTpl.playsinline = true;
   if(videoAttrs.poster) videoTpl.poster = videoAttrs.poster;
   if(videoAttrs.preload) videoTpl.preload = videoAttrs.preload;
 
+  videoTpl.onclick = () => videoClickCallback();
   if(timeUpdateCallback) videoTpl.ontimeupdate = () => timeUpdateCallback();
   if(videoEndCallback) videoTpl.onended = () => videoEndCallback();
 }
