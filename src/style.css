@@ -27,7 +27,7 @@
   display: flex;
   align-items: stretch;
   align-content: stretch;
-  z-index: 2147483647;
+  /* z-index: 2147483647; */
 }
 
 .ivid__choice-button {
@@ -43,6 +43,31 @@
 .ivid__choice-button:hover {
   font-size: larger;
   background-color: rgba(0,0,0,0.32);
+}
+
+.ivid__ctrls-wrapper {
+  width: 100%;
+}
+
+.ivid__ctrls-progress {
+  width: 100%;
+}
+
+.ivid__ctrls-buttons-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.ivid__ctrls-button {
+  height: 40px;
+  width: 40px;
+}
+
+.ivid__ctrls-volume {
+}
+
+.ivid__ctrls-spacer {
+  width: 100%;
 }
 
 .hidden {

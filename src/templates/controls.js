@@ -45,20 +45,20 @@ const setupControlsTemplate = (
   buttonsWraper.setAttribute('class', 'ivid__ctrls-buttons-wrapper');
 
   let playButton = document.createElement('button');
-  playButton.setAttribute('class', 'ivid__ctrls-button ivid__ctrls-button--play');
-  progress.onclick = (e) => playClickCallback(e);
+  playButton.setAttribute('class', 'ivid__ctrls-button');
+  progress.onclick = () => playClickCallback();
 
   let volumeButton = document.createElement('button');
-  volumeButton.setAttribute('class', 'ivid__ctrls-button ivid__ctrls-button--volume');
-  progress.onmouseover = (e) => volumeHoverCallback(e);
-  progress.onmouseleave = (e) => volumeLeaveCallback(e);
-  progress.onclick = (e) => volumeClickCallback(e);
+  volumeButton.setAttribute('class', 'ivid__ctrls-button');
+  progress.onmouseover = () => volumeHoverCallback();
+  progress.onmouseleave = () => volumeLeaveCallback();
+  progress.onclick = () => volumeClickCallback();
 
   let volumeSlider = document.createElement('input');
   volumeSlider.setAttribute('class', 'ivid__ctrls-volume');
   volumeSlider.type = 'range';
   volumeSlider.min = 0;
-  volumeSlider.max = 100;
+  volumeSlider.max = 0;
   volumeSlider.step = 1;
   volumeSlider.oninput = (e) => volumeChangeCallback(e);
   volumeSlider.onchange = (e) => volumeChangeCallback(e);
@@ -67,8 +67,8 @@ const setupControlsTemplate = (
   spacer.setAttribute('class', 'ivid__ctrls-spacer');
 
   let fullscreenButton = document.createElement('button');
-  fullscreenButton.setAttribute('class', 'ivid__ctrls-button ivid__ctrls-button--fullscreen');
-  fullscreenButton.onclick = (e) => fullscreenClickCallback(e);
+  fullscreenButton.setAttribute('class', 'ivid__ctrls-button');
+  fullscreenButton.onclick = () => fullscreenClickCallback();
 
   // Contruct the template
   buttonsWraper.appendChild(playButton);
@@ -81,7 +81,7 @@ const setupControlsTemplate = (
   controlsTemplate.appendChild(buttonsWraper);
 
   // An object holding the single elements of the controlsTemplate
-  return controls = {
+  return {
     controlsTemplate,
     progress,
     playButton,
