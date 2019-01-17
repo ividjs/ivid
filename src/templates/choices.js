@@ -15,6 +15,12 @@
  */
 
 
+const setupChoicesTemplate = () => {
+  let choices = document.createElement('div');
+  choices.setAttribute('class', 'ivid__choice-wrapper hidden');
+  return choices;
+}
+
 /**
  * @param {HTMLElement} choicesTpl 
  * @param {Object} videoItem 
@@ -28,8 +34,8 @@ const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
 
   Object.keys(choices).map(
     (choiceUid) => {
-
       let button = document.createElement('button');
+      
       button.setAttribute('class', 'ivid__choice-button');
       button.innerHTML = choices[choiceUid];
       button.onclick = () => choiceClickCallback(choiceUid);
@@ -37,12 +43,6 @@ const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
       choicesTpl.appendChild(button);
     }
   );
-}
-
-const setupChoicesTemplate = () => {
-  let choices = document.createElement('div');
-  choices.setAttribute('class', 'ivid__choice-wrapper hidden');
-  return choices;
 }
 
 

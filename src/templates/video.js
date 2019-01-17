@@ -17,31 +17,35 @@
 
 /**
  * @param {HTMLElement} videoTpl 
+ */
+const setupVideoTemplate = (videoTpl) => {
+  if (!videoTpl) videoTpl = document.createElement('video');
+  videoTpl.classList.add('ivid__video');
+  return videoTpl;
+}
+
+/**
+ * @param {HTMLElement} videoTpl 
+ * @param {Object} videoAttrs
  * @param {Object} videoItem 
  * @param {Function} videoClickCallback 
  * @param {Function|null} videoEndCallback 
  * @param {Function|null} timeUpdateCallback 
  */
-const renderVideoTemplate = (videoTpl, videoItem, videoClickCallback, videoEndCallback, timeUpdateCallback) => {
+const renderVideoTemplate = (videoTpl, videoAttrs, videoItem, videoClickCallback, videoEndCallback, timeUpdateCallback) => {
   videoTpl.id = videoItem.uid;
-  videoTpl.setAttribute('src', videoItem.src);
-  videoTpl.setAttribute('preload', 'auto');
-  videoTpl.setAttribute('controls', true);
-  videoTpl.setAttribute('autoplay', true);
-  videoTpl.setAttribute('playsinline', true);
-
+  videoTpl.src = videoItem.src;
   videoTpl.onclick = () => videoClickCallback();
+
+  if(videoAttrs.autoplay) videoTpl.autoplay = true;
+  if(videoAttrs.controls) videoTpl.controls = true;
+  if(videoAttrs.muted) videoTpl.muted = true;
+  if(videoAttrs.playsinline) videoTpl.playsinline = true;
+  if(videoAttrs.poster) videoTpl.poster = videoAttrs.poster;
+  if(videoAttrs.preload) videoTpl.preload = videoAttrs.preload;
+
   if(timeUpdateCallback) videoTpl.ontimeupdate = () => timeUpdateCallback();
   if(videoEndCallback) videoTpl.onended = () => videoEndCallback();
-}
-
-/**
- * @param {HTMLElement} videoTpl 
- */
-const setupVideoTemplate = (videoTpl) => {
-  if (!videoTpl) videoTpl = document.createElement('video');
-  videoTpl.classList.add("ivid__video");
-  return videoTpl;
 }
 
 

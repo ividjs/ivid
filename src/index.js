@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { snakeToCamel } from './helpers/snakecamel';
-import { setupStyle } from './renderers/style';
-import { setupBaseTemplate } from './renderers/base';
-import { setupVideoTemplate, renderVideoTemplate} from './renderers/video';
-import { setupChoicesTemplate, renderChoicesTemplate } from './renderers/choices';
+import './style.css';
+import { toggleFullScreen } from './helpers/fullscreen';
+import { setupBaseTemplate } from './templates/base';
+import { setupVideoTemplate, renderVideoTemplate} from './templates/video';
+import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices';
 
 class Ivid extends HTMLElement {
   
@@ -46,16 +46,17 @@ class Ivid extends HTMLElement {
       },
       onVideoEnded: {
         value: () => {
-          if(!this.state.next) return;
-          this.setAttribute('current', this.state.next);
-          this.state.videoTemplate.setAttribute('controls', true);
-          this.state.choicesTemplate.classList.add('hidden');
+          let s = this.state;
+          if(!s.next) return;
+
+          this.setAttribute('current', s.next);
+          if(s.videoAttrs.controls) s.videoTemplate.controls = true;
+          s.choicesTemplate.classList.add('hidden');
         }
       },
       onVideoClick: {
         value: () => {
           let video = this.state.videoTemplate;
-          video.focus();
           video.paused ? video.play() : video.pause();
         }
       },
@@ -74,9 +75,14 @@ class Ivid extends HTMLElement {
         
           if (videoTpl.duration - videoTpl.currentTime <= countdown) {
             videoTpl.ontimeupdate = null;
-            videoTpl.removeAttribute('controls');
+            if(s.videoAttrs.controls) videoTpl.controls = false;
             s.choicesTemplate.classList.remove('hidden');
           }
+        }
+      },
+      onKeydown: {
+        value: (event) => {
+          if(event.keyCode === 70) toggleFullScreen();
         }
       }
     });
@@ -89,39 +95,48 @@ class Ivid extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if(oldValue !== null) {
       this.setState({
-        [snakeToCamel(name)]: (name !== 'srcmap') ? newValue : JSON.parse(newValue),
+        [name]: (name === 'srcmap') ? JSON.parse(newValue) : newValue,
       });
     }
   }
 
   setup() {
+    // HTML5 video attributes to pass down
+    let videoAttrs = {
+      autoplay: this.hasAttribute('autoplay') || null,
+      controls: this.hasAttribute('controls') || null,
+      muted: this.hasAttribute('muted') || null,
+      playsinline: this.hasAttribute('playsinline') || null,
+      poster: this.getAttribute('poster'),
+      preload: this.getAttribute('preload'),
+    };
+    
+    // IVID specific attrubutes
     let srcmap = JSON.parse(this.getAttribute('srcmap'));
-    let current = this.getAttribute('current') 
+    let current = this.getAttribute('current');
+    let next = this.getAttribute('next') || '';
+
+    // HTMLElements - IVID skeleton
+    let baseTemplate = setupBaseTemplate();
+    let choicesTemplate = setupChoicesTemplate();
+    let videoTemplate = setupVideoTemplate(this.firstElementChild);
+
+    // Renders the component skeleton
+    this.innerHTML = '';
+    baseTemplate.appendChild(videoTemplate);
+    baseTemplate.appendChild(choicesTemplate);
+    this.appendChild(baseTemplate);
+
     if (!current) {
       current = Object.keys(srcmap)[0];
       this.setAttribute('current', current);
     }
 
-    let next = this.getAttribute('next') || '';
-
-    let style = setupStyle();
-    let baseTemplate = setupBaseTemplate();
-    let choicesTemplate = setupChoicesTemplate();
-    let videoTemplate = setupVideoTemplate(this.firstElementChild);
-
-    this.innerHTML = '';
-
-    this.appendChild(style);
-    
-    baseTemplate.appendChild(videoTemplate);
-    baseTemplate.appendChild(choicesTemplate);
-    this.appendChild(baseTemplate);
-    
     return {
+      videoAttrs,
       srcmap,
       current,
       next,
-      style,
       baseTemplate,
       videoTemplate,
       choicesTemplate,
@@ -145,6 +160,7 @@ class Ivid extends HTMLElement {
 
     renderVideoTemplate(
       s.videoTemplate,
+      s.videoAttrs,
       currentVideo,
       this.onVideoClick,
       (currentVideo.options ? this.onVideoEnded : null),

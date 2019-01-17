@@ -75,5 +75,4 @@ let srcmap = {
   [vid7.uid]: vid7
 };
 
-let ivid = document.getElementById("ivid-sample");
-ivid.setAttribute("srcmap", JSON.stringify(srcmap));
+document.getElementById("ivid-sample").setAttribute("srcmap", JSON.stringify(srcmap));

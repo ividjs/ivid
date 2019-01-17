@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-const snakeToCamel = (s) => {
-  return s.replace(/(\-\w)/g, function(m){return m[1].toUpperCase();});
+ 
+const setupBaseTemplate = () => {
+  let template = document.createElement('div');
+  template.setAttribute('class', 'ivid ivid__wrapper');
+  return template;
 }
 
 
-export { snakeToCamel };
+export { setupBaseTemplate };
