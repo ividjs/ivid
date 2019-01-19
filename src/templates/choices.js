@@ -17,7 +17,8 @@
 
 const setupChoicesTemplate = () => {
   let choices = document.createElement('div');
-  choices.setAttribute('class', 'ivid__choice-wrapper hidden');
+  choices.setAttribute('class', 'ivid__choice-wrapper');
+  choices.setAttribute('data-state', 'hidden');
   return choices;
 }
 
@@ -29,7 +30,7 @@ const setupChoicesTemplate = () => {
 const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
   const choices = videoItem.options.choices;
 
-  choicesTpl.classList.add('hidden');
+  choicesTpl.setAttribute('data-state', 'hidden');
   choicesTpl.innerHTML = '';
 
   Object.keys(choices).map(

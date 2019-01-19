@@ -15,16 +15,105 @@
  */
 
 
- /**
-  * @param {Function} progressClickCallback 
-  * @param {Function} playClickCallback 
-  * @param {Function} volumeClickCallback 
-  * @param {Function} volumeHoverCallback 
-  * @param {Function} volumeLeaveCallback 
-  * @param {Function} volumeChangeCallback 
-  * @param {Function} fullscreenClickCallback 
-  */
-const setupControlsTemplate = (
+const supportsProgress = () => (document.createElement('progress').max !== undefined);
+
+const setupControlsTemplate = () => {
+  let controlsTemplate = document.createElement('div');
+  controlsTemplate.setAttribute('class', 'ivid__ctrls-wrapper');
+
+  // Progress controls
+  let progressWrapper = document.createElement('div');
+  progressWrapper.setAttribute('class', 'ivid__ctrls-progress');
+
+  let progressElement = document.createElement('progress');
+  if (!supportsProgress()) progressElement.setAttribute('data-state', 'pollyfill');
+
+  let progressValue = document.createElement('span');
+  if (!supportsProgress()) progressValue.setAttribute('data-state', 'pollyfill');
+
+  let progress = {
+    progressWrapper,
+    progressElement,
+    progressValue
+  }
+
+  // ---
+  let buttonsWrapper = document.createElement('div');
+  buttonsWrapper.setAttribute('class', 'ivid__ctrls-buttons-wrapper');
+
+  // Play/Pause control
+  let playButton = document.createElement('button');
+  playButton.setAttribute('data-state', 'pause');
+  playButton.setAttribute('class', 'ivid__ctrls-button material-icons');
+
+  // Volume controls
+  let volumeWrapper = document.createElement('div');
+  volumeWrapper.setAttribute('class', 'ivid__ctrls-volume-wrapper');
+
+  let volumeButton = document.createElement('button');
+  volumeButton.setAttribute('data-state', 'volume_up');
+  volumeButton.setAttribute('class', 'ivid__ctrls-button material-icons');
+
+  let volumeSlider = document.createElement('input');
+  volumeSlider.setAttribute('data-state', 'close');
+  volumeSlider.setAttribute('class', 'ivid__ctrls-volume');
+  volumeSlider.type = 'range';
+  volumeSlider.min = 0;
+  volumeSlider.max = 100;
+  volumeSlider.step = 1;
+
+  let volume = {
+    volumeWrapper,
+    volumeButton,
+    volumeSlider
+  };
+
+  // ---
+  let spacer = document.createElement('div');
+  spacer.setAttribute('class', 'ivid__ctrls-spacer');
+
+  // Fullscreen control
+  let fullscreenButton = document.createElement('button');
+  fullscreenButton.setAttribute('data-state', 'fullscreen');
+  fullscreenButton.setAttribute('class', 'ivid__ctrls-button material-icons');
+
+
+  // Contruct the template
+  progressWrapper.appendChild(progressElement);
+  progressWrapper.appendChild(progressValue);
+
+  volumeWrapper.appendChild(volumeButton);
+  volumeWrapper.appendChild(volumeSlider)
+
+  buttonsWrapper.appendChild(playButton);
+  buttonsWrapper.appendChild(volumeWrapper);
+  buttonsWrapper.appendChild(spacer);
+  buttonsWrapper.appendChild(fullscreenButton);
+
+  controlsTemplate.appendChild(progressWrapper);
+  controlsTemplate.appendChild(buttonsWrapper);
+
+
+  return {
+    controlsTemplate,
+    progress,
+    playButton,
+    volume,
+    fullscreenButton,
+  };
+}
+
+/**
+ * @param {Function} progressClickCallback 
+ * @param {Function} playClickCallback 
+ * @param {Function} volumeClickCallback 
+ * @param {Function} volumeHoverCallback 
+ * @param {Function} volumeLeaveCallback 
+ * @param {Function} volumeChangeCallback 
+ * @param {Function} fullscreenClickCallback 
+ */
+ const renderControlsTemplate = (
+  controls,
   progressClickCallback,
   playClickCallback,
   volumeClickCallback,
@@ -34,62 +123,22 @@ const setupControlsTemplate = (
   fullscreenClickCallback
 ) => {
 
-  let controlsTemplate = document.createElement('div');
-  controlsTemplate.setAttribute('class', 'ivid__ctrls-wrapper');
+  controls.progress.progressWrapper.onclick = (e) => progressClickCallback(e);
 
-  let progress = document.createElement('progress');
-  progress.setAttribute('class', 'ivid__ctrls-progress');
-  progress.onclick = (e) => progressClickCallback(e);
+  controls.playButton.onclick = () => playClickCallback();
 
-  let buttonsWraper = document.createElement('div');
-  buttonsWraper.setAttribute('class', 'ivid__ctrls-buttons-wrapper');
+  controls.volume.volumeWrapper.onmouseover = () => volumeHoverCallback();
+  controls.volume.volumeWrapper.onmouseleave = () => volumeLeaveCallback();
+  controls.volume.volumeButton.onclick = () => volumeClickCallback();
 
-  let playButton = document.createElement('button');
-  playButton.setAttribute('class', 'ivid__ctrls-button');
-  progress.onclick = () => playClickCallback();
+  controls.volume.volumeSlider.oninput = (e) => volumeChangeCallback(e);
+  controls.volume.volumeSlider.onchange = (e) => volumeChangeCallback(e);
 
-  let volumeButton = document.createElement('button');
-  volumeButton.setAttribute('class', 'ivid__ctrls-button');
-  progress.onmouseover = () => volumeHoverCallback();
-  progress.onmouseleave = () => volumeLeaveCallback();
-  progress.onclick = () => volumeClickCallback();
-
-  let volumeSlider = document.createElement('input');
-  volumeSlider.setAttribute('class', 'ivid__ctrls-volume');
-  volumeSlider.type = 'range';
-  volumeSlider.min = 0;
-  volumeSlider.max = 0;
-  volumeSlider.step = 1;
-  volumeSlider.oninput = (e) => volumeChangeCallback(e);
-  volumeSlider.onchange = (e) => volumeChangeCallback(e);
-
-  let spacer = document.createElement('div');
-  spacer.setAttribute('class', 'ivid__ctrls-spacer');
-
-  let fullscreenButton = document.createElement('button');
-  fullscreenButton.setAttribute('class', 'ivid__ctrls-button');
-  fullscreenButton.onclick = () => fullscreenClickCallback();
-
-  // Contruct the template
-  buttonsWraper.appendChild(playButton);
-  buttonsWraper.appendChild(volumeButton);
-  buttonsWraper.appendChild(volumeSlider);
-  buttonsWraper.appendChild(spacer);
-  buttonsWraper.appendChild(fullscreenButton);
-
-  controlsTemplate.appendChild(progress);
-  controlsTemplate.appendChild(buttonsWraper);
-
-  // An object holding the single elements of the controlsTemplate
-  return {
-    controlsTemplate,
-    progress,
-    playButton,
-    volumeButton,
-    volumeSlider,
-    fullscreenButton,
-  };
+  controls.fullscreenButton.onclick = () => fullscreenClickCallback();
 }
 
 
-export { setupControlsTemplate };
+export { 
+  setupControlsTemplate,
+  renderControlsTemplate
+};

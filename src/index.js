@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import './style.css';
+
 import { toggleFullScreen, isFullScreen } from './helpers/fullscreen';
 import { setupBaseTemplate } from './templates/base';
-import { setupControlsTemplate } from './templates/controls';
+import { setupControlsTemplate, renderControlsTemplate } from './templates/controls';
 import { setupVideoTemplate, renderVideoTemplate} from './templates/video';
 import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices';
 
@@ -43,13 +43,11 @@ class Ivid extends HTMLElement {
           this.render();
         }
       },
-
-      // IVID events
       onProgressClick: {
         value: (event) => {
           let video = this.state.videoTemplate;
           let prog = event.target;
-          let pos = (event.pageX  - (prog.offsetLeft + prog.offsetParent.offsetLeft)) / prog.offsetWidth;
+          let pos = (event.pageX - (prog.offsetLeft + prog.offsetParent.offsetLeft)) / prog.offsetWidth;
           video.currentTime = pos * video.duration;
         }
       },
@@ -61,18 +59,18 @@ class Ivid extends HTMLElement {
       onVolumeClick: {
         value: () => {
           let video = this.state.videoTemplate;
-          this.changeVolume(video.muted ? video.volume : 0);
+          this.changeVolume(video.muted ? 100 : 0);
         }
       },
       onVolumeHover: {
         value: () => {
-          let volumeSlider = this.state.controls.volumeSlider;
+          let volumeSlider = this.state.controls.volume.volumeSlider;
           volumeSlider.setAttribute('data-state', 'open');
         }
       },
       onVolumeLeave: {
         value: () => {
-          let volumeSlider = this.state.controls.volumeSlider;
+          let volumeSlider = this.state.controls.volume.volumeSlider;
           volumeSlider.setAttribute('data-state', 'close');
         }
       },
@@ -94,9 +92,11 @@ class Ivid extends HTMLElement {
       },
       onLoadedMetadata: {
         value: () => {
-          let progress = this.state.controls.progress;
+          let controls = this.state.controls;
           let video = this.state.videoTemplate;
-          progress.setAttribute('max', video.duration);
+          controls.progress.progressElement.setAttribute('max', video.duration);
+          controls.volume.volumeSlider.setAttribute('value', video.volume * 100);
+          this.changeButtonState('mute');
         }
       },
       onTimeUpdate: {
@@ -104,16 +104,18 @@ class Ivid extends HTMLElement {
           let s = this.state;
           let current = s.srcmap[s.current];
           let video = s.videoTemplate;
+          let progress = this.state.controls.progress;
 
-          s.controls.progress.value = video.currentTime;
+          progress.progressElement.value = video.currentTime;
+          progress.progressValue.style.width = Math.floor((video.currentTime / video.duration) * 100) + "%";
 
           if (current.options) {
             let timeout = current.options.timeout;
             let countdown = (timeout ? timeout : 10)
 
             if (video.duration - video.currentTime <= countdown) {
-              if(s.videoAttrs.controls) s.controls.controlsTemplate.classList.add('hidden');
-              s.choicesTemplate.classList.remove('hidden');
+              if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
+              s.choicesTemplate.setAttribute('data-state', 'visible');
             }
           }
         }
@@ -124,8 +126,8 @@ class Ivid extends HTMLElement {
           if(!s.next) return;
 
           this.setAttribute('current', s.next);
-          if(s.videoAttrs.controls) s.controls.controlsTemplate.classList.remove('hidden');
-          s.choicesTemplate.classList.add('hidden');
+          if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'visible');
+          s.choicesTemplate.setAttribute('data-state', 'hidden');
         }
       },
       onChoiceSelected: {
@@ -181,18 +183,7 @@ class Ivid extends HTMLElement {
     let baseTemplate = setupBaseTemplate();
     let videoTemplate = setupVideoTemplate(this.firstElementChild);
     let choicesTemplate = setupChoicesTemplate();
-    let controls = setupControlsTemplate(
-      this.onProgressClick,
-      this.onPlayClick,
-      this.onVolumeClick,
-      this.onVolumeHover,
-      this.onVolumeLeave,
-      this.onVolumeChange,
-      this.onFullscreenClick
-    );
-
-    console.log(controls);
-
+    let controls = setupControlsTemplate();
 
     // Renders the component skeleton
     this.innerHTML = '';
@@ -237,6 +228,17 @@ class Ivid extends HTMLElement {
       (currentVideo.options ? this.onVideoEnded : null),
       (currentVideo.options ? this.onTimeUpdate : null)
     );
+
+    renderControlsTemplate(
+      s.controls,
+      this.onProgressClick,
+      this.onPlayClick,
+      this.onVolumeClick,
+      this.onVolumeHover,
+      this.onVolumeLeave,
+      this.onVolumeChange,
+      this.onFullscreenClick
+    )
   }
 
 
@@ -244,12 +246,13 @@ class Ivid extends HTMLElement {
   togglePlayPause() {
     let video = this.state.videoTemplate;
     video.paused ? video.play() : video.pause();
-    this.changeButtonState('playpause');
+    this.changeButtonState('play');
   }
 
   changeVolume(value) {
     let video = this.state.videoTemplate;
-    video.volume = value;
+    video.volume = value / 100;
+    console.log(video.volume);
     video.muted = (value <= 0) ? true : false;
     this.changeButtonState('mute');
   }
@@ -259,16 +262,24 @@ class Ivid extends HTMLElement {
     let controls = this.state.controls;
 
     switch (type) {
-      case 'playpause': 
-        controls.playButton.setAttribute('data-state', (video.paused || video.ended) ? 'play' : 'pause')
+      case 'play': 
+        controls.playButton.setAttribute('data-state', (video.paused || video.ended)
+          ? 'play_arrow'
+          : 'pause'
+        );
         break;
 
       case 'mute': 
-        controls.volumeButton.setAttribute('data-state', video.muted ? 'unmute' : 'mute')
+        controls.volume.volumeButton.setAttribute('data-state', video.muted
+          ? 'volume_off'
+          : (video.volume >= 0.5)
+            ? 'volume_up'
+            : 'volume_down'
+        );
         break;
 
       case 'fullscreen': 
-        controls.fullscreenButton.setAttribute('data-state', isFullScreen() ? 'exit-full' : 'go-full')
+        controls.fullscreenButton.setAttribute('data-state', isFullScreen() ? 'fullscreen' : 'fullscreen_exit');
         break;
     }
   }
