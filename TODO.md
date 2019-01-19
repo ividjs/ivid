@@ -1,3 +1,3 @@
 # TODOs
 
-[ ] Add tracks support (subs, audio)
+- [ ] Add tracks support (subs, audio)
