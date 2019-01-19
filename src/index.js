@@ -16,7 +16,7 @@
 
 
 import { toggleFullScreen, isFullScreen } from './helpers/fullscreen';
-import { setupBaseTemplate } from './templates/base';
+import { setupBaseTemplate, renderBaseTemplate } from './templates/base';
 import { setupControlsTemplate, renderControlsTemplate } from './templates/controls';
 import { setupVideoTemplate, renderVideoTemplate} from './templates/video';
 import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices';
@@ -53,13 +53,12 @@ class Ivid extends HTMLElement {
       },
       onPlayClick: {
         value: () => {
-          this.togglePlayPause();
+          this.togglePlay();
         }
       },
       onVolumeClick: {
         value: () => {
-          let video = this.state.videoTemplate;
-          this.changeVolume(video.muted ? 100 : 0);
+          this.toggleMute();
         }
       },
       onVolumeHover: {
@@ -87,7 +86,7 @@ class Ivid extends HTMLElement {
       },
       onVideoClick: {
         value: () => {
-          this.togglePlayPause();
+          this.togglePlay();
         }
       },
       onLoadedMetadata: {
@@ -97,6 +96,7 @@ class Ivid extends HTMLElement {
           controls.progress.progressElement.setAttribute('max', video.duration);
           controls.volume.volumeSlider.setAttribute('value', video.volume * 100);
           this.changeButtonState('mute');
+          this.changeButtonState('play');
         }
       },
       onTimeUpdate: {
@@ -138,7 +138,23 @@ class Ivid extends HTMLElement {
       },
       onKeydown: {
         value: (event) => {
-          if(event.keyCode === 70) toggleFullScreen();
+          let video = this.state.videoTemplate;
+          switch (event.keyCode) {
+            // F (Fullscreen)
+            case 70: toggleFullScreen(); break;
+            // M (Mute)
+            case 77: this.toggleMute(); break;
+            // arrow_right (forwards)
+            // case 39: toggleFullScreen(); break;
+            // arrow_left (backwards)
+            // case 37: toggleFullScreen(); break;
+            // arrow_top (volume up)
+            case 38: this.changeVolume((video.volume*100)+10); break;
+            // arrow_bottom (volume down)
+            case 40: this.changeVolume((video.volume*100)-10); break;
+            // space (play/pause)
+            case 32: this.togglePlay(); break;
+          }
         }
       }
     });
@@ -147,6 +163,19 @@ class Ivid extends HTMLElement {
 
   connectedCallback() {
     this.render();
+
+    renderControlsTemplate(
+      this.state.controls,
+      this.onProgressClick,
+      this.onPlayClick,
+      this.onVolumeClick,
+      this.onVolumeHover,
+      this.onVolumeLeave,
+      this.onVolumeChange,
+      this.onFullscreenClick
+    );
+
+    document.onkeydown = (e) => this.onKeydown(e);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -228,31 +257,25 @@ class Ivid extends HTMLElement {
       (currentVideo.options ? this.onVideoEnded : null),
       (currentVideo.options ? this.onTimeUpdate : null)
     );
-
-    renderControlsTemplate(
-      s.controls,
-      this.onProgressClick,
-      this.onPlayClick,
-      this.onVolumeClick,
-      this.onVolumeHover,
-      this.onVolumeLeave,
-      this.onVolumeChange,
-      this.onFullscreenClick
-    )
   }
 
 
   // Internal helper functions
-  togglePlayPause() {
+  togglePlay() {
     let video = this.state.videoTemplate;
     video.paused ? video.play() : video.pause();
     this.changeButtonState('play');
   }
 
+  toggleMute() {
+    let video = this.state.videoTemplate;
+    video.muted = !video.muted;
+    this.changeButtonState('mute');
+  }
+
   changeVolume(value) {
     let video = this.state.videoTemplate;
-    video.volume = value / 100;
-    console.log(video.volume);
+    video.volume = (value > 100) ? 1 : (value < 0) ? 0 : value/100;
     video.muted = (value <= 0) ? true : false;
     this.changeButtonState('mute');
   }
@@ -270,6 +293,7 @@ class Ivid extends HTMLElement {
         break;
 
       case 'mute': 
+        controls.volume.volumeSlider.setAttribute('value', video.volume*100);
         controls.volume.volumeButton.setAttribute('data-state', video.muted
           ? 'volume_off'
           : (video.volume >= 0.5)
