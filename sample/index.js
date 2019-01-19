@@ -65,7 +65,7 @@ vid7.options = {
 
 
 // Add all videoItems to the src map
-let srcmap = {
+let model = {
   [vid1.uid]: vid1,
   [vid2.uid]: vid2,
   [vid3.uid]: vid3,
@@ -75,4 +75,4 @@ let srcmap = {
   [vid7.uid]: vid7
 };
 
-document.getElementById("ivid-sample").setAttribute("srcmap", JSON.stringify(srcmap));
+document.getElementById("ivid-sample").setAttribute("model", JSON.stringify(model));

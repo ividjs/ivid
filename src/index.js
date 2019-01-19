@@ -24,7 +24,7 @@ import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices
 class Ivid extends HTMLElement {
   
   static get observedAttributes() {
-    return ['srcmap', 'current'];
+    return ['model', 'current'];
   }
 
   constructor() {
@@ -102,7 +102,7 @@ class Ivid extends HTMLElement {
       onTimeUpdate: {
         value: () => {
           let s = this.state;
-          let current = s.srcmap[s.current];
+          let current = s.model[s.current];
           let video = s.videoTemplate;
           let controls = this.state.controls;
 
@@ -201,7 +201,7 @@ class Ivid extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if(oldValue !== null) {
       this.setState({
-        [name]: (name === 'srcmap') ? JSON.parse(newValue) : newValue,
+        [name]: (name === 'model') ? JSON.parse(newValue) : newValue,
       });
     }
   }
@@ -219,13 +219,13 @@ class Ivid extends HTMLElement {
     };
     
     // IVID specific attrubutes
-    let srcmap = JSON.parse(this.getAttribute('srcmap'));
+    let model = JSON.parse(this.getAttribute('model'));
     let next = this.getAttribute('next') || '';
     let current = this.getAttribute('current');
 
     if (!current) {
-      current = Object.keys(srcmap)[0];
-      this.setAttribute('current', current);
+      current = Object.keys(model)[0];
+      this.setAttribute('current', model);
     }
 
     // HTMLElements - IVID skeleton
@@ -245,7 +245,7 @@ class Ivid extends HTMLElement {
 
     return {
       videoAttrs,
-      srcmap,
+      model,
       next,
       current,
       baseTemplate,
@@ -258,7 +258,7 @@ class Ivid extends HTMLElement {
 
   render() {
     let s = this.state;
-    let currentVideo = s.srcmap[s.current];
+    let currentVideo = s.model[s.current];
 
     if(currentVideo.options) {
       // Set fallback selection
