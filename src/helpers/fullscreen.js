@@ -19,7 +19,9 @@ const isFullScreen = () => {
   return !!(document.fullScreen || document.webkitIsFullScreen || document.mozFullScreen || document.msFullscreenElement || document.fullscreenElement);
 }
 
-
+/**
+ * https://www.w3schools.com/howto/howto_js_fullscreen.asp
+ */
 const toggleFullScreen = () => {
   if (isFullScreen()) {
     if (document.exitFullscreen) {

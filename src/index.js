@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-
+import { secondsToHms } from './helpers/transformer';
 import { toggleFullScreen, isFullScreen } from './helpers/fullscreen';
-import { setupBaseTemplate, renderBaseTemplate } from './templates/base';
+import { setupBaseTemplate } from './templates/base';
 import { setupControlsTemplate, renderControlsTemplate } from './templates/controls';
 import { setupVideoTemplate, renderVideoTemplate} from './templates/video';
 import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices';
@@ -104,18 +104,19 @@ class Ivid extends HTMLElement {
           let s = this.state;
           let current = s.srcmap[s.current];
           let video = s.videoTemplate;
-          let progress = this.state.controls.progress;
+          let controls = this.state.controls;
 
-          progress.progressElement.value = video.currentTime;
-          progress.progressValue.style.width = Math.floor((video.currentTime / video.duration) * 100) + "%";
+          controls.time.innerHTML = `${secondsToHms(video.currentTime)}  /  ${secondsToHms(video.duration)}`;
+          controls.progress.progressElement.value = video.currentTime;
+          controls.progress.progressValue.style.width = Math.floor((video.currentTime / video.duration) * 100) + "%";
 
           if (current.options) {
             let timeout = current.options.timeout;
-            let countdown = (timeout ? timeout : 10)
+            let countdown = (timeout ? timeout : 10);
 
             if (video.duration - video.currentTime <= countdown) {
               if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
-              s.choicesTemplate.setAttribute('data-state', 'visible');
+              s.choicesTemplate.removeAttribute('data-state');
             }
           }
         }
@@ -126,7 +127,7 @@ class Ivid extends HTMLElement {
           if(!s.next) return;
 
           this.setAttribute('current', s.next);
-          if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'visible');
+          if(s.videoAttrs.controls) s.controls.controlsTemplate.removeAttribute('data-state');
           s.choicesTemplate.setAttribute('data-state', 'hidden');
         }
       },
@@ -134,6 +135,19 @@ class Ivid extends HTMLElement {
         value: (choiceUid) => {
           this.setAttribute('next', choiceUid);
           this.state.next = choiceUid;
+        }
+      },
+      onMouseMoveIvid: {
+        value: () => {
+          let choices = this.state.choicesTemplate;
+          let controls = this.state.controls.controlsTemplate;
+
+          clearTimeout(this.state.timer);
+          this.state.timer = setTimeout(() => {
+            controls.setAttribute('data-state', 'hidden')
+          }, 2300);
+    
+          if (choices.getAttribute('data-state')) controls.removeAttribute('data-state');
         }
       },
       onKeydown: {
@@ -145,9 +159,9 @@ class Ivid extends HTMLElement {
             // M (Mute)
             case 77: this.toggleMute(); break;
             // arrow_right (forwards)
-            // case 39: toggleFullScreen(); break;
+            case 39: this.forwardVideo(); break;
             // arrow_left (backwards)
-            // case 37: toggleFullScreen(); break;
+            case 37: this.backwardVideo(); break;
             // arrow_top (volume up)
             case 38: this.changeVolume((video.volume*100)+10); break;
             // arrow_bottom (volume down)
@@ -162,10 +176,11 @@ class Ivid extends HTMLElement {
 
 
   connectedCallback() {
+    let s = this.state;
     this.render();
 
     renderControlsTemplate(
-      this.state.controls,
+      s.controls,
       this.onProgressClick,
       this.onPlayClick,
       this.onVolumeClick,
@@ -176,6 +191,11 @@ class Ivid extends HTMLElement {
     );
 
     document.onkeydown = (e) => this.onKeydown(e);
+    s.baseTemplate.onmousemove = () => this.onMouseMoveIvid();
+
+    s.baseTemplate.onmouseleave = (e) => {
+      s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
+    };
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -221,6 +241,8 @@ class Ivid extends HTMLElement {
     baseTemplate.appendChild(controls.controlsTemplate);
     this.appendChild(baseTemplate);
 
+    let timer = setTimeout(null, 300);
+
     return {
       videoAttrs,
       srcmap,
@@ -230,6 +252,7 @@ class Ivid extends HTMLElement {
       videoTemplate,
       choicesTemplate,
       controls,
+      timer,
     }
   }
 
@@ -261,6 +284,16 @@ class Ivid extends HTMLElement {
 
 
   // Internal helper functions
+  forwardVideo() {
+    let video = this.state.videoTemplate;
+    (video.currentTime++ > video.duration) ? video.currentTime = video.duration : video.currentTime++;
+  }
+
+  backwardVideo() {
+    let video = this.state.videoTemplate;
+    (video.currentTime-- < 0) ? video.currentTime = 0 : video.currentTime--;
+  }
+
   togglePlay() {
     let video = this.state.videoTemplate;
     video.paused ? video.play() : video.pause();
@@ -281,6 +314,7 @@ class Ivid extends HTMLElement {
   }
 
   changeButtonState(type) {
+    let ivid = this.state.baseTemplate;
     let video = this.state.videoTemplate;
     let controls = this.state.controls;
 
@@ -303,6 +337,7 @@ class Ivid extends HTMLElement {
         break;
 
       case 'fullscreen': 
+        ivid.setAttribute('data-state', isFullScreen() ? 'fullscreen' : '');
         controls.fullscreenButton.setAttribute('data-state', isFullScreen() ? 'fullscreen' : 'fullscreen_exit');
         break;
     }

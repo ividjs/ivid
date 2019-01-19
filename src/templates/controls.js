@@ -68,6 +68,10 @@ const setupControlsTemplate = () => {
     volumeSlider
   };
 
+  let time = document.createElement('span');
+  time.setAttribute('class', 'ivid_ctrls-time');
+  time.innerHTML = '0:00  /  0:00';
+
   // ---
   let spacer = document.createElement('div');
   spacer.setAttribute('class', 'ivid__ctrls-spacer');
@@ -87,6 +91,7 @@ const setupControlsTemplate = () => {
 
   buttonsWrapper.appendChild(playButton);
   buttonsWrapper.appendChild(volumeWrapper);
+  buttonsWrapper.appendChild(time);
   buttonsWrapper.appendChild(spacer);
   buttonsWrapper.appendChild(fullscreenButton);
 
@@ -99,6 +104,7 @@ const setupControlsTemplate = () => {
     progress,
     playButton,
     volume,
+    time,
     fullscreenButton,
   };
 }
