@@ -137,7 +137,7 @@ class Ivid extends HTMLElement {
           this.state.next = choiceUid;
         }
       },
-      onMouseMoveIvid: {
+      onShowControls: {
         value: () => {
           let choices = this.state.choicesTemplate;
           let controls = this.state.controls.controlsTemplate;
@@ -152,6 +152,7 @@ class Ivid extends HTMLElement {
       },
       onKeydown: {
         value: (event) => {
+          this.onShowControls();
           let video = this.state.videoTemplate;
           switch (event.keyCode) {
             // F (Fullscreen)
@@ -191,7 +192,7 @@ class Ivid extends HTMLElement {
     );
 
     document.onkeydown = (e) => this.onKeydown(e);
-    s.baseTemplate.onmousemove = () => this.onMouseMoveIvid();
+    s.baseTemplate.onmousemove = () => this.onShowControls();
 
     s.baseTemplate.onmouseleave = (e) => {
       s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
