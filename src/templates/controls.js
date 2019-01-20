@@ -19,7 +19,10 @@ const supportsProgress = () => (document.createElement('progress').max !== undef
 
 const setupControlsTemplate = () => {
   let controlsTemplate = document.createElement('div');
-  controlsTemplate.setAttribute('class', 'ivid__ctrls-wrapper');
+  controlsTemplate.setAttribute('class', 'ivid__ctrls');
+
+  let controlsWrapper = document.createElement('div');
+  controlsWrapper.setAttribute('class', 'ivid__ctrls-wrapper');
 
   // Progress controls
   let progressWrapper = document.createElement('div');
@@ -95,9 +98,10 @@ const setupControlsTemplate = () => {
   buttonsWrapper.appendChild(spacer);
   buttonsWrapper.appendChild(fullscreenButton);
 
-  controlsTemplate.appendChild(progressWrapper);
-  controlsTemplate.appendChild(buttonsWrapper);
+  controlsWrapper.appendChild(progressWrapper);
+  controlsWrapper.appendChild(buttonsWrapper);
 
+  controlsTemplate.appendChild(controlsWrapper);
 
   return {
     controlsTemplate,
