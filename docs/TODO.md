@@ -6,4 +6,5 @@
   - [ ] iVid Event listeners
   - [ ] CSS classes
 
+- [ ] Add touch support
 - [ ] Add tracks support (subs, audio)
