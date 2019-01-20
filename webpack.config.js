@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'ivid.js',
+    filename: 'ivid.min.js',
   },
   module: {
     rules: [
@@ -18,12 +18,6 @@ module.exports = {
             presets: ['@babel/preset-env']
           }
         }
-      }, {
-        test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" }
-        ]
       }
     ]
   }
