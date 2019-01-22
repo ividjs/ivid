@@ -110,13 +110,23 @@ class Ivid extends HTMLElement {
           controls.progress.progressElement.value = video.currentTime;
           controls.progress.progressValue.style.width = Math.floor((video.currentTime / video.duration) * 100) + "%";
 
-          if (current.options) {
-            let timeout = current.options.timeout;
-            let countdown = (timeout ? timeout : 10);
+          if (s.choicesTemplate.hasAttribute('data-state')) {
+            if (current.options) {
+              const timeout = current.options.timeout;
+              const countdown = (timeout ? timeout : 10);
+              if (video.duration - video.currentTime <= countdown) {
+                if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
+                s.choicesTemplate.removeAttribute('data-state');
+              }
+            }
+          } else {
+            if (video.duration - video.currentTime <= 1) {
+              let videoItem = s.model[s.current];
+              let fallback = null;
 
-            if (video.duration - video.currentTime <= countdown) {
-              if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
-              s.choicesTemplate.removeAttribute('data-state');
+              if(videoItem.options)
+                fallback = videoItem.options.fallback || Object.keys(videoItem.options.choices)[0];
+              this.onChoiceSelected(fallback);
             }
           }
         }
@@ -133,8 +143,18 @@ class Ivid extends HTMLElement {
       },
       onChoiceSelected: {
         value: (choiceUid) => {
+          let choices = this.state.choicesTemplate;
+
           this.setAttribute('next', choiceUid);
           this.state.next = choiceUid;
+
+          for (let i = 0; i < choices.children.length; i++) {
+            let choiceBtn = choices.children[i];
+            
+            (choiceBtn.id.toString() === choiceUid.toString())
+              ? choiceBtn.setAttribute('data-state', 'selected')
+              : choiceBtn.removeAttribute('data-state');
+          }
         }
       },
       onShowControls: {
@@ -177,26 +197,7 @@ class Ivid extends HTMLElement {
 
 
   connectedCallback() {
-    let s = this.state;
     this.render();
-
-    renderControlsTemplate(
-      s.controls,
-      this.onProgressClick,
-      this.onPlayClick,
-      this.onVolumeClick,
-      this.onVolumeHover,
-      this.onVolumeLeave,
-      this.onVolumeChange,
-      this.onFullscreenClick
-    );
-
-    document.onkeydown = (e) => this.onKeydown(e);
-    s.baseTemplate.onmousemove = () => this.onShowControls();
-
-    s.baseTemplate.onmouseleave = (e) => {
-      s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
-    };
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -226,7 +227,7 @@ class Ivid extends HTMLElement {
 
     if (!current) {
       current = Object.keys(model)[0];
-      this.setAttribute('current', model);
+      this.setAttribute('current', current);
     }
 
     // HTMLElements - IVID skeleton
@@ -261,17 +262,6 @@ class Ivid extends HTMLElement {
     let s = this.state;
     let currentVideo = s.model[s.current];
 
-    if(currentVideo.options) {
-      // Set fallback selection
-      let fallback = currentVideo.options.fallback || Object.keys(currentVideo.options.choices)[0]
-      this.onChoiceSelected(fallback);
-      if(currentVideo.options.choices) {
-        renderChoicesTemplate(s.choicesTemplate, currentVideo, this.onChoiceSelected);
-      }
-    } else {
-      this.onChoiceSelected(null);
-    }
-
     renderVideoTemplate(
       s.videoTemplate,
       s.videoAttrs,
@@ -281,6 +271,28 @@ class Ivid extends HTMLElement {
       (currentVideo.options ? this.onVideoEnded : null),
       (currentVideo.options ? this.onTimeUpdate : null)
     );
+
+    renderControlsTemplate(
+      s.controls,
+      this.onProgressClick,
+      this.onPlayClick,
+      this.onVolumeClick,
+      this.onVolumeHover,
+      this.onVolumeLeave,
+      this.onVolumeChange,
+      this.onFullscreenClick
+    );
+
+    if(currentVideo.options && currentVideo.options.choices)
+      renderChoicesTemplate(s.choicesTemplate, currentVideo, this.onChoiceSelected);
+
+    // Keyboard and mouse event hooks
+    document.onkeydown = (e) => this.onKeydown(e);
+    s.baseTemplate.onmousemove = () => this.onShowControls();
+
+    s.baseTemplate.onmouseleave = (e) => {
+      s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
+    };
   }
 
 

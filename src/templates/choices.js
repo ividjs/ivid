@@ -17,7 +17,7 @@
 
 const setupChoicesTemplate = () => {
   let choices = document.createElement('div');
-  choices.setAttribute('class', 'ivid__choice-wrapper');
+  choices.setAttribute('class', 'ivid__choices');
   choices.setAttribute('data-state', 'hidden');
   return choices;
 }
@@ -38,6 +38,7 @@ const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
       let button = document.createElement('button');
       
       button.setAttribute('class', 'ivid__choice-button');
+      button.id = choiceUid;
       button.innerHTML = choices[choiceUid];
       button.onclick = () => choiceClickCallback(choiceUid);
       

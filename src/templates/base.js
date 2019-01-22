@@ -17,7 +17,7 @@
  
 const setupBaseTemplate = () => {
   let template = document.createElement('div');
-  template.setAttribute('class', 'ivid ivid__wrapper');
+  template.setAttribute('class', 'ivid');
   return template;
 }
 

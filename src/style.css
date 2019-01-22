@@ -30,7 +30,7 @@
 /*
   CHOICES
 */
-.ivid__choice-wrapper {
+.ivid__choices {
   position: absolute;
   display: flex;
   align-items: stretch;
@@ -42,7 +42,7 @@
   opacity: 1;
   transition: opacity 0.23s cubic-bezier(0.4,0,1,1);
 }
-.ivid__choice-wrapper[data-state=hidden] {
+.ivid__choices[data-state=hidden] {
   opacity: 0;
   z-index: 0;
 }
@@ -59,8 +59,10 @@
   height: 5.7em;
   transition: background-color 0.23s cubic-bezier(0.4,0,1,1);
 }
-
 .ivid__choice-button:hover {
+  background-image: linear-gradient(transparent, rgba(0,0,0,0.47));
+}
+.ivid__choice-button[data-state=selected] {
   background-image: linear-gradient(transparent, rgba(0,0,0,0.47));
 }
 
@@ -106,42 +108,42 @@
 }
 
 .ivid__ctrls-progress > progress {
-	display: block;
-	width: 100%;
-	height: 15%;
-	margin-top: 0.2em;
-	margin-top: 0.125em;
-	border: none;
-	overflow: hidden;
-	-moz-border-radius: 0.2em;
-	-webkit-border-radius: 0.2em;
-	border-radius: 0.2em;
-	color: red;
+  display: block;
+  width: 100%;
+  height: 15%;
+  margin-top: 0.2em;
+  margin-top: 0.125em;
+  border: none;
+  overflow: hidden;
+  -moz-border-radius: 0.2em;
+  -webkit-border-radius: 0.2em;
+  border-radius: 0.2em;
+  color: red;
 }
 .ivid__ctrls-progress > progress:hover {
-	height: 20%;
+  height: 20%;
 }
 .ivid__ctrls-progress > progress[data-state="pollyfill"] {
-	background-color: #ccc;
+  background-color: #ccc;
 }
 
 .ivid__ctrls-progress > span {
   display: none;
-}
+ }
 .ivid__ctrls-progress > span[data-state=pollyfill] {
   display: inline-block;
-	background-color: red;
-	height: 15%;	
+  background-color: red;
+  height: 15%;	
 }
 .ivid__ctrls-progress > span[data-state=pollyfill]:hover {
-	height: 20%;	
+  height: 20%;	
 }
 
 .ivid__ctrls-progress > progress::-moz-progress-bar {
-	background-color: red;
+  background-color: red;
 }
 .ivid__ctrls-progress > progress::-webkit-progress-value {
-	background-color: red;
+  background-color: red;
 }
 /* PROGRESS END */
 
@@ -196,16 +198,16 @@
   background: white;
   width: 1em;
   height: 1em;
-	-webkit-border-radius: 100%;
-	border-radius: 100%;
+  -webkit-border-radius: 100%;
+  border-radius: 100%;
 }
 .ivid__ctrls-volume::-moz-range-thumb {
   cursor: pointer;
   background: white;
   width: 1em;
   height: 1em;
-	-moz-border-radius: 100%;
-	border-radius: 100%;
+  -moz-border-radius: 100%;
+  border-radius: 100%;
 }
 
 .ivid_ctrls-time {
