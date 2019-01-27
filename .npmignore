@@ -4,3 +4,4 @@
 *.lock
 .vscode
 webpack*
+licenser.js
