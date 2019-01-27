@@ -1,10 +1,9 @@
 # TODOs
 
 - [ ] Create documentation
-  - [ ] About the project
+  - [x] About the project
   - [ ] iVid `model`
-  - [ ] iVid Event listeners
-  - [ ] CSS classes
+  - [ ] iVid `styles`
 
 - [ ] Add touch support
 - [ ] Add tracks support (subs, audio)

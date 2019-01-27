@@ -7,7 +7,13 @@
 </br>
 
 <p align="center">
+  <a href="https://github.com/ividjs/ivid/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/published-CB3837.svg?style=for-the-badge&logo=npm&longCache=true" alt="npm-published" style="max-width:100%;">
+  </a>
   <img src="https://img.shields.io/badge/vanilla-black.svg?style=for-the-badge&logo=javascript&longCache=true" alt="vanillajs" style="max-width:100%;">
+  <a href="https://github.com/ividjs/ivid/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/webcomponent-blue.svg?style=for-the-badge&logo=w&longCache=true" alt="webcomponents-publised" style="max-width:100%;">
+  </a>
 </p>
 
 <p align="center">
@@ -18,3 +24,92 @@
     <img src="https://img.shields.io/badge/%E2%9D%A4%EF%B8%8Fdonate-ec2f10.svg?longCache=true" alt="donate">
   </a>
 </p>
+
+</br>
+
+# About
+
+IVID is an interactive video player for modern browsers.
+
+Full VanillaJS webcomponent. Plug-n-play ready, easy setup and use.
+
+[Try it online](https://ividjs.github.io/ivid).
+
+</br>
+
+# How to use it
+
+```html
+<!doctype html>
+<html>
+  <head>
+    <script src="ivid.min.js" type="module" async></script>
+    <!-- Optional Styles -->
+    <link href="ivid.min.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script async>
+      let model = { ... }; // Setup the video-map model
+      document.getElementById("sample").setAttribute("model", JSON.stringify(model));
+    </script>
+  </head>
+
+  <body>
+    <i-video id="sample" controls autoplay playsinline></i-video>
+  </body>
+</html>
+```
+*Also see: [IVID-model][1] and [IVID-styles][2] documentation*
+
+</br>
+
+# Features
+
+- Next video selection (the interactive bit)
+- Simple single-setup: [ivid-model][1]
+- Inherited HTML5 video properties
+- Full video controls on-screen
+- Customizable controls: [ivid-styles][2]
+- Key-mapping for keyboard video controls
+  - Play/Pause: `spacebar`
+  - Mute/Unmute: `m`
+  - Fullscreen toggle: `f`
+  - Volume up/down: `arrow_up` / `awrrow_down`
+  - Forward/backward: `arrow_right` / `arrow_left`
+
+*Please take a look at the current [TODO][3] list, any contribution is welcome*
+
+</br>
+
+# Development setup
+
+Clone ivid `dev` branch
+```bash
+git clone -b dev git@github.com:ividjs/ivid.git
+```
+
+```bash
+npm i # or yarn
+npm run dev
+```
+
+Open browser on `localhost:3000`, the sandbox should be ready to play
+
+</br>
+
+# Screenshots
+
+**player controls**
+
+<img style="border-radius: 5px" src="https://raw.githubusercontent.com/ividjs/ivid-assets/master/ivid_mug.png">
+
+
+**choices controls**
+
+<img style="border-radius: 5px" src="https://raw.githubusercontent.com/ividjs/ivid-assets/master/ivid_mug2.png">
+
+
+<!-- LINKS -->
+[1]: /docs/ivid-model.md 
+[2]: /docs/ivid-styles.md 
+[3]: /docs/TODO.md
