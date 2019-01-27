@@ -5,7 +5,7 @@
 
 </br>
 
-# Keyboard mappings
+## Keyboard mappings
 
 - Play/Pause: `spacebar`
 - Mute/Unmute: `m`
@@ -15,7 +15,7 @@
 
 </br>
 
-# Screenshots
+## Screenshots
 
 <img style="border-radius: 5px" src="https://raw.githubusercontent.com/ividjs/ivid-assets/master/ivid_mug.png">
 
