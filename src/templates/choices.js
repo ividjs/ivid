@@ -30,8 +30,8 @@ const setupChoicesTemplate = () => {
 const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
   const choices = videoItem.options.choices;
 
-  choicesTpl.setAttribute('data-state', 'hidden');
   choicesTpl.innerHTML = '';
+  choicesTpl.setAttribute('data-state', 'hidden');
 
   Object.keys(choices).map(
     (choiceUid) => {
@@ -51,8 +51,8 @@ const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
  * @param {HTMLElement} choicesTpl 
  */
 const resetChoicesTemplate = (choicesTpl) => {
-  choicesTpl.setAttribute('data-state', 'hidden');
   choicesTpl.innerHTML = '';
+  choicesTpl.setAttribute('data-state', 'hidden');
 }
 
 

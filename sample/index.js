@@ -74,7 +74,7 @@ video4.options = {
 video6.options = {
   choices: {
     [video3.uid]: 'The troiKat now?',
-    [video4.uid]: `¯\_(ツ)_/¯`,
+    [video4.uid]: 'What?',
   },
   fallback: video2.uid // And more twisted plays
 }

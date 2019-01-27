@@ -110,27 +110,25 @@ class Ivid extends HTMLElement {
           controls.progress.progressElement.value = videoTpl.currentTime;
           controls.progress.progressValue.style.width = Math.floor((videoTpl.currentTime / videoTpl.duration) * 100) + "%";
 
-          if (s.choicesTemplate.hasAttribute('data-state')) {
-            if (videoItem.options && videoItem.options.choices) {
-              const timeout = videoItem.options.timeout;
-              const countdown = (timeout ? timeout : 10);
-              if (videoTpl.duration - videoTpl.currentTime <= countdown) {
-                if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
-                s.choicesTemplate.removeAttribute('data-state');
-              }
+          if (s.choicesTemplate.hasAttribute('data-state') && videoItem.options && videoItem.options.choices) {
+            const timeout = videoItem.options.timeout;
+            const countdown = (timeout ? timeout : 10);
+            if (videoTpl.duration - videoTpl.currentTime <= countdown) {
+              if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
+              s.choicesTemplate.removeAttribute('data-state');
             }
-          } else {
-            if (videoTpl.duration - videoTpl.currentTime <= 1) {
-              let videoItem = s.model[s.current];
-              let fallback = null;
+          }
 
-              if (s.next)
-                fallback = s.next;
-              else if (videoItem.options)
-                fallback = videoItem.options.fallback || Object.keys(videoItem.options.choices)[0];
-                
-              this.onChoiceSelected(fallback);
-            }
+          if (videoTpl.duration - videoTpl.currentTime <= 1) {
+            console.log('lololo')
+            let fallback = null;
+
+            if (s.next)
+              fallback = s.next;
+            else if (videoItem.options)
+              fallback = videoItem.options.fallback || Object.keys(videoItem.options.choices)[0];
+              
+            this.onChoiceSelected(fallback);
           }
         }
       },
@@ -247,6 +245,14 @@ class Ivid extends HTMLElement {
     baseTemplate.appendChild(controls.controlsTemplate);
     this.appendChild(baseTemplate);
 
+    // Keyboard and mouse event hooks
+    document.onkeydown = (e) => this.onKeydown(e);
+    baseTemplate.onmousemove = () => this.onShowControls();
+
+    baseTemplate.onmouseleave = (e) => {
+      controls.controlsTemplate.setAttribute('data-state', 'hidden');
+    };
+
     let timer = setTimeout(null, 300);
 
     return {
@@ -265,6 +271,12 @@ class Ivid extends HTMLElement {
   render() {
     let s = this.state;
     let currentVideo = s.model[s.current];
+
+    this.onChoiceSelected('');
+
+    (currentVideo.options && currentVideo.options.choices)
+      ? renderChoicesTemplate(s.choicesTemplate, currentVideo, this.onChoiceSelected)
+      : resetChoicesTemplate(s.choicesTemplate);
 
     renderVideoTemplate(
       s.videoTemplate,
@@ -286,18 +298,6 @@ class Ivid extends HTMLElement {
       this.onVolumeChange,
       this.onFullscreenClick
     );
-
-    (currentVideo.options && currentVideo.options.choices)
-      ? renderChoicesTemplate(s.choicesTemplate, currentVideo, this.onChoiceSelected)
-      : resetChoicesTemplate(s.choicesTemplate);
-
-    // Keyboard and mouse event hooks
-    document.onkeydown = (e) => this.onKeydown(e);
-    s.baseTemplate.onmousemove = () => this.onShowControls();
-
-    s.baseTemplate.onmouseleave = (e) => {
-      s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
-    };
   }
 
 
