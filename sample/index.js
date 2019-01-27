@@ -59,23 +59,22 @@ video2.options = {
 }
 
 video3.options = {
-  fallback: video4.uid // Or seamlessly
+  fallback: video5.uid // Or seamlessly
 }
 
 
 // Or setting everything up, for a better control
 video4.options = {
   choices: {
-    [video5.uid]: 'Trouble, oh trouble',
+    [video1.uid]: 'Meow',
   },
   fallback: video6.uid
 }
 
 video6.options = {
   choices: {
-    [video3.uid]: 'A troiKat',
     [video3.uid]: 'The troiKat now?',
-    [video4.uid]: '¯\_(ツ)_/¯',
+    [video4.uid]: `¯\_(ツ)_/¯`,
   },
   fallback: video2.uid // And more twisted plays
 }

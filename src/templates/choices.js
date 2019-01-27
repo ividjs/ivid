@@ -47,8 +47,17 @@ const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
   );
 }
 
+/**
+ * @param {HTMLElement} choicesTpl 
+ */
+const resetChoicesTemplate = (choicesTpl) => {
+  choicesTpl.setAttribute('data-state', 'hidden');
+  choicesTpl.innerHTML = '';
+}
+
 
 export {
   setupChoicesTemplate,
-  renderChoicesTemplate
+  renderChoicesTemplate,
+  resetChoicesTemplate,
 };

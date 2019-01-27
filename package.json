@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./src/index.js",
   "scripts": {
-    "dev": "npm run build && npm run dev:setup && nodemon ./sample/server.js",
+    "dev": "npm run build && npm run dev:setup && node ./sample/server.js",
     "dev:setup": "cp -R ./dist/ivid.min.css ./sample/lib/ && cp -R ./dist/ivid.min.js ./sample/lib/",
     "build": "npm run build:style && npm run build:script",
     "build:style": "minify ./src/style.css > ./dist/ivid.min.css",

@@ -19,7 +19,7 @@ import { toggleFullScreen, isFullScreen } from './helpers/fullscreen';
 import { setupBaseTemplate } from './templates/base';
 import { setupControlsTemplate, renderControlsTemplate } from './templates/controls';
 import { setupVideoTemplate, renderVideoTemplate} from './templates/video';
-import { setupChoicesTemplate, renderChoicesTemplate } from './templates/choices';
+import { setupChoicesTemplate, renderChoicesTemplate, resetChoicesTemplate } from './templates/choices';
 
 class Ivid extends HTMLElement {
   
@@ -45,10 +45,10 @@ class Ivid extends HTMLElement {
       },
       onProgressClick: {
         value: (event) => {
-          let video = this.state.videoTemplate;
+          let videoTpl = this.state.videoTemplate;
           let prog = event.target;
           let pos = (event.pageX - (prog.offsetLeft + prog.offsetParent.offsetLeft)) / prog.offsetWidth;
-          video.currentTime = pos * video.duration;
+          videoTpl.currentTime = pos * videoTpl.duration;
         }
       },
       onPlayClick: {
@@ -92,9 +92,9 @@ class Ivid extends HTMLElement {
       onLoadedMetadata: {
         value: () => {
           let controls = this.state.controls;
-          let video = this.state.videoTemplate;
-          controls.progress.progressElement.setAttribute('max', video.duration);
-          controls.volume.volumeSlider.setAttribute('value', video.volume * 100);
+          let videoTpl = this.state.videoTemplate;
+          controls.progress.progressElement.setAttribute('max', videoTpl.duration);
+          controls.volume.volumeSlider.setAttribute('value', videoTpl.volume * 100);
           this.changeButtonState('mute');
           this.changeButtonState('play');
         }
@@ -102,30 +102,33 @@ class Ivid extends HTMLElement {
       onTimeUpdate: {
         value: () => {
           let s = this.state;
-          let current = s.model[s.current];
-          let video = s.videoTemplate;
+          let videoItem = s.model[s.current];
+          let videoTpl = s.videoTemplate;
           let controls = this.state.controls;
 
-          controls.time.innerHTML = `${secondsToHms(video.currentTime)}  /  ${secondsToHms(video.duration)}`;
-          controls.progress.progressElement.value = video.currentTime;
-          controls.progress.progressValue.style.width = Math.floor((video.currentTime / video.duration) * 100) + "%";
+          controls.time.innerHTML = `${secondsToHms(videoTpl.currentTime)}  /  ${secondsToHms(videoTpl.duration)}`;
+          controls.progress.progressElement.value = videoTpl.currentTime;
+          controls.progress.progressValue.style.width = Math.floor((videoTpl.currentTime / videoTpl.duration) * 100) + "%";
 
           if (s.choicesTemplate.hasAttribute('data-state')) {
-            if (current.options) {
-              const timeout = current.options.timeout;
+            if (videoItem.options && videoItem.options.choices) {
+              const timeout = videoItem.options.timeout;
               const countdown = (timeout ? timeout : 10);
-              if (video.duration - video.currentTime <= countdown) {
+              if (videoTpl.duration - videoTpl.currentTime <= countdown) {
                 if(s.videoAttrs.controls) s.controls.controlsTemplate.setAttribute('data-state', 'hidden');
                 s.choicesTemplate.removeAttribute('data-state');
               }
             }
           } else {
-            if (video.duration - video.currentTime <= 1) {
+            if (videoTpl.duration - videoTpl.currentTime <= 1) {
               let videoItem = s.model[s.current];
               let fallback = null;
 
-              if(videoItem.options)
+              if (s.next)
+                fallback = s.next;
+              else if (videoItem.options)
                 fallback = videoItem.options.fallback || Object.keys(videoItem.options.choices)[0];
+                
               this.onChoiceSelected(fallback);
             }
           }
@@ -134,11 +137,12 @@ class Ivid extends HTMLElement {
       onVideoEnded: {
         value: () => {
           let s = this.state;
+
+          s.choicesTemplate.setAttribute('data-state', 'hidden');
           if(!s.next) return;
 
           this.setAttribute('current', s.next);
           if(s.videoAttrs.controls) s.controls.controlsTemplate.removeAttribute('data-state');
-          s.choicesTemplate.setAttribute('data-state', 'hidden');
         }
       },
       onChoiceSelected: {
@@ -173,7 +177,7 @@ class Ivid extends HTMLElement {
       onKeydown: {
         value: (event) => {
           this.onShowControls();
-          let video = this.state.videoTemplate;
+          let videoTpl = this.state.videoTemplate;
           switch (event.keyCode) {
             // F (Fullscreen)
             case 70: toggleFullScreen(); break;
@@ -184,9 +188,9 @@ class Ivid extends HTMLElement {
             // arrow_left (backwards)
             case 37: this.backwardVideo(); break;
             // arrow_top (volume up)
-            case 38: this.changeVolume((video.volume*100)+10); break;
+            case 38: this.changeVolume((videoTpl.volume*100)+10); break;
             // arrow_bottom (volume down)
-            case 40: this.changeVolume((video.volume*100)-10); break;
+            case 40: this.changeVolume((videoTpl.volume*100)-10); break;
             // space (play/pause)
             case 32: this.togglePlay(); break;
           }
@@ -283,8 +287,9 @@ class Ivid extends HTMLElement {
       this.onFullscreenClick
     );
 
-    if(currentVideo.options && currentVideo.options.choices)
-      renderChoicesTemplate(s.choicesTemplate, currentVideo, this.onChoiceSelected);
+    (currentVideo.options && currentVideo.options.choices)
+      ? renderChoicesTemplate(s.choicesTemplate, currentVideo, this.onChoiceSelected)
+      : resetChoicesTemplate(s.choicesTemplate);
 
     // Keyboard and mouse event hooks
     document.onkeydown = (e) => this.onKeydown(e);
@@ -298,52 +303,56 @@ class Ivid extends HTMLElement {
 
   // Internal helper functions
   forwardVideo() {
-    let video = this.state.videoTemplate;
-    (video.currentTime++ > video.duration) ? video.currentTime = video.duration : video.currentTime++;
+    let videoTpl = this.state.videoTemplate;
+    (videoTpl.currentTime++ > videoTpl.duration)
+      ? videoTpl.currentTime = videoTpl.duration
+      : videoTpl.currentTime++;
   }
 
   backwardVideo() {
-    let video = this.state.videoTemplate;
-    (video.currentTime-- < 0) ? video.currentTime = 0 : video.currentTime--;
+    let videoTpl = this.state.videoTemplate;
+    (videoTpl.currentTime-- < 0)
+      ? videoTpl.currentTime = 0
+      : videoTpl.currentTime--;
   }
 
   togglePlay() {
-    let video = this.state.videoTemplate;
-    video.paused ? video.play() : video.pause();
+    let videoTpl = this.state.videoTemplate;
+    videoTpl.paused ? videoTpl.play() : videoTpl.pause();
     this.changeButtonState('play');
   }
 
   toggleMute() {
-    let video = this.state.videoTemplate;
-    video.muted = !video.muted;
+    let videoTpl = this.state.videoTemplate;
+    videoTpl.muted = !videoTpl.muted;
     this.changeButtonState('mute');
   }
 
   changeVolume(value) {
-    let video = this.state.videoTemplate;
-    video.volume = (value > 100) ? 1 : (value < 0) ? 0 : value/100;
-    video.muted = (value <= 0) ? true : false;
+    let videoTpl = this.state.videoTemplate;
+    videoTpl.volume = (value > 100) ? 1 : (value < 0) ? 0 : value/100;
+    videoTpl.muted = (value <= 0) ? true : false;
     this.changeButtonState('mute');
   }
 
   changeButtonState(type) {
     let ivid = this.state.baseTemplate;
-    let video = this.state.videoTemplate;
+    let videoTpl = this.state.videoTemplate;
     let controls = this.state.controls;
 
     switch (type) {
       case 'play': 
-        controls.playButton.setAttribute('data-state', (video.paused || video.ended)
+        controls.playButton.setAttribute('data-state', (videoTpl.paused || videoTpl.ended)
           ? 'play_arrow'
           : 'pause'
         );
         break;
 
       case 'mute': 
-        controls.volume.volumeSlider.setAttribute('value', video.volume*100);
-        controls.volume.volumeButton.setAttribute('data-state', video.muted
+        controls.volume.volumeSlider.setAttribute('value', videoTpl.volume*100);
+        controls.volume.volumeButton.setAttribute('data-state', videoTpl.muted
           ? 'volume_off'
-          : (video.volume >= 0.5)
+          : (videoTpl.volume >= 0.5)
             ? 'volume_up'
             : 'volume_down'
         );
