@@ -7,11 +7,11 @@
 </br>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/ivid">
+  <a href="https://www.npmjs.com/package/@ividjs/ivid">
     <img src="https://img.shields.io/badge/published-CB3837.svg?style=for-the-badge&logo=npm&longCache=true" alt="npm-published" style="max-width:100%;">
   </a>
   <img src="https://img.shields.io/badge/vanilla-black.svg?style=for-the-badge&logo=javascript&longCache=true" alt="vanillajs" style="max-width:100%;">
-  <a href="https://www.webcomponents.org/element/ividjs/ivid">
+  <a href="https://www.webcomponents.org/element/@ividjs/ivid">
     <img src="https://img.shields.io/badge/webcomponent-blue.svg?style=for-the-badge&logo=w&longCache=true" alt="webcomponents-publised" style="max-width:100%;">
   </a>
 </p>
@@ -43,9 +43,9 @@ Full VanillaJS webcomponent. Plug-n-play ready, easy setup and use.
 <!doctype html>
 <html>
   <head>
-    <script src="ivid.min.js" type="module" async></script>
+    <script src="//unpkg.com/@ividjs/ivid@latest/dist/ivid.min.js" type="module" async></script>
     <!-- Optional Styles -->
-    <link href="ivid.min.css" rel="stylesheet">
+    <link href="//unpkg.com/@ividjs/ivid@latest/dist/ivid.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <script async>
@@ -110,6 +110,6 @@ Open browser on `localhost:3000`, the sandbox should be ready to play
 
 
 <!-- LINKS -->
-[1]: /docs/ivid-model.md 
-[2]: /docs/ivid-styles.md 
-[3]: /docs/TODO.md
+[1]: https://github.com/ividjs/ivid/blob/master/docs/ivid-model.md
+[2]: https://github.com/ividjs/ivid/blob/master/docs/ivid-styles.md 
+[3]: https://github.com/ividjs/ivid/blob/master/docs/TODO.md

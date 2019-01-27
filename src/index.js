@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+ 
 import { secondsToHms } from './helpers/transformer';
 import { toggleFullScreen, isFullScreen } from './helpers/fullscreen';
 import { setupBaseTemplate } from './templates/base';
