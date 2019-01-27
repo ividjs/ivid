@@ -94,4 +94,7 @@ let model = {
   [video7.uid]: video7
 };
 
+/**
+ * Add model to iVid component (as a JSON string)
+ */
 document.getElementById("ivid-sample").setAttribute("model", JSON.stringify(model));
