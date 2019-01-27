@@ -27,7 +27,7 @@
 
 </br>
 
-# About
+## About
 
 IVID is an interactive video player for modern browsers.
 
@@ -37,7 +37,7 @@ Full VanillaJS webcomponent. Plug-n-play ready, easy setup and use.
 
 </br>
 
-# How to use it
+## How to use it
 
 ```html
 <!doctype html>
@@ -63,7 +63,7 @@ Full VanillaJS webcomponent. Plug-n-play ready, easy setup and use.
 
 </br>
 
-# Features
+## Features
 
 - Next video selection (the interactive bit)
 - Simple single-setup: [ivid-model][1]
@@ -81,7 +81,7 @@ Full VanillaJS webcomponent. Plug-n-play ready, easy setup and use.
 
 </br>
 
-# Development setup
+## Development setup
 
 Clone ivid `dev` branch
 ```bash
@@ -97,7 +97,7 @@ Open browser on `localhost:3000`, the sandbox should be ready to play
 
 </br>
 
-# Screenshots
+## Screenshots
 
 **player controls**
 
