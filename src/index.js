@@ -121,7 +121,6 @@ class Ivid extends HTMLElement {
           }
 
           if (videoTpl.duration - videoTpl.currentTime <= 1) {
-            console.log('lololo')
             let fallback = null;
 
             if (s.next)
