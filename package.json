@@ -1,6 +1,6 @@
 {
   "name": "@ividjs/ivid",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "./dist/ivid.min.js",
   "scripts": {
     "dev": "npm run build && npm run dev:setup && node ./sandbox/server.js",
