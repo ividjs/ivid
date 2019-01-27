@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/badge/published-CB3837.svg?style=for-the-badge&logo=npm&longCache=true" alt="npm-published" style="max-width:100%;">
   </a>
   <img src="https://img.shields.io/badge/vanilla-black.svg?style=for-the-badge&logo=javascript&longCache=true" alt="vanillajs" style="max-width:100%;">
-  <a href="https://www.webcomponents.org/element/alxpez/ivid">
+  <a href="https://www.webcomponents.org/element/ividjs/ivid">
     <img src="https://img.shields.io/badge/webcomponent-blue.svg?style=for-the-badge&logo=w&longCache=true" alt="webcomponents-publised" style="max-width:100%;">
   </a>
 </p>
