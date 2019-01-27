@@ -83,13 +83,18 @@ Full VanillaJS webcomponent. Plug-n-play ready, easy setup and use.
 
 ## Development setup
 
-Clone ivid `dev` branch
+Clone ivid
 ```bash
-git clone -b dev git@github.com:ividjs/ivid.git
+git clone git@github.com:ividjs/ivid.git
 ```
 
+Install development dependencies
 ```bash
 npm i # or yarn
+```
+
+Run development server
+```bash
 npm run dev
 ```
 
