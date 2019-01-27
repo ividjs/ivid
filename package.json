@@ -1,13 +1,14 @@
 {
-  "name": "ivid",
+  "name": "@ividjs/ivid",
   "version": "1.0.0",
-  "main": "./src/index.js",
+  "main": "./dist/ivid.min.js",
   "scripts": {
     "dev": "npm run build && npm run dev:setup && node ./sandbox/server.js",
     "dev:setup": "cp -R ./dist/ivid.min.css ./sandbox/lib/ && cp -R ./dist/ivid.min.js ./sandbox/lib/",
-    "build": "npm run build:style && npm run build:script",
+    "build": "npm run build:style && npm run build:script && npm run licenser",
     "build:style": "minify ./src/style.css > ./dist/ivid.min.css",
-    "build:script": "webpack --config webpack.config.js"
+    "build:script": "webpack --config webpack.config.js",
+    "licenser": "node licenser.js"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
@@ -17,6 +18,7 @@
     "minify": "^4.1.0",
     "node-static": "^0.7.11",
     "path": "^0.12.7",
+    "prepend-file": "^1.3.1",
     "style-loader": "^0.23.1",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.1.2"
@@ -35,7 +37,7 @@
   "homepage": "https://github.com/ividjs/ivid#readme",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/ividjs/ivid.git"
+    "url": "https://github.com/ividjs/ivid.git"
   },
   "bugs": {
     "url": "https://github.com/ividjs/ivid/issues"
