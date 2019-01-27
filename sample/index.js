@@ -1,78 +1,98 @@
 
-// Layout all the videos used for the iVideo experience
-let vid1 = {
+/**
+ * Layout of all the videos used for the iVid sandbox
+ */
+let video1 = {
   uid: 111,
-  src: "//download.blender.org/peach/trailer/trailer_400p.ogg"
+  src: "//ia601305.us.archive.org/28/items/arashyekt4_gmail_Cat/Cat.mp4"
 };
 
-let vid2 = {
+let video2 = {
   uid: 222,
-  src: "//ia802602.us.archive.org/29/items/vai_VAiLiiiR_BC/vai.mp4"
+  src: "//ia902205.us.archive.org/26/items/gregthecatascatcatwmv/cat_512kb.mp4"
 };
 
-let vid3 = {
+let video3 = {
   uid: 333,
-  src: "//ia800300.us.archive.org/6/items/tsunami_phuket/tsunami_phuket_512kb.mp4"
+  src: "//ia800407.us.archive.org/24/items/spam_troic_Cat/cat.ogv"
 };
 
-let vid4 = {
+let video4 = {
   uid: 444,
-  src: "//ia902604.us.archive.org/10/items/tsunami_patong_beach/tsunami_patong_beach_512kb.mp4"
+  src: "//ia802801.us.archive.org/3/items/Movie954/movie%20954.mp4"
 };
 
-let vid5 = {
+let video5 = {
   uid: 555,
-  src: "//ia802702.us.archive.org/17/items/rhysmatrixeffectpreview/preview_512kb.mp4"
+  src: "//ia800207.us.archive.org/33/items/CatTrouble/CatTrouble.mp4"
 };
 
-let vid6 = {
+let video6 = {
   uid: 666,
-  src: "//ia800502.us.archive.org/7/items/NuclearExplosion/NuclearExplosionwww.keepvid.com_512kb.mp4"
+  src: "//ia802605.us.archive.org/33/items/CatDance/KittyCatDance.ogv"
 };
 
-let vid7 = {
+let video7 = {
   uid: 777,
-  src: "//vjs.zencdn.net/v/oceans.mp4"
+  src: "//ia800708.us.archive.org/21/items/youtube-nB5BguHIyXs/Cool_Cat_by_Charlie_Schmidt_s_Keyboard_Cat-nB5BguHIyXs.ogv"
 };
 
 
-// Add video options (decision rules etc)
-vid1.options = {
+/**
+ * Add video options "choice-map"
+ */
+
+// There's no need to add a fallback attribute...
+video1.options = {
   choices: {
-    [vid2.uid]: 'some random video',
-    [vid6.uid]: 'destruction',
+    [video2.uid]: 'A cat', // ... the first choice will be the default fallback
+    [video3.uid]: 'A troiKat',
+    [video6.uid]: 'A kitty cat dance',
   },
-  fallback: vid2.uid
 }
 
-vid3.options = {
-  fallback: vid4.uid
-}
-
-vid6.options = {
-  choices: {
-    [vid3.uid]: 'tsunami 1',
-    [vid4.uid]: 'tsunami 2',
-  },
-  fallback: vid3.uid
-}
-
-vid7.options = {
-  choices: {
-    [vid1.uid]: 'go back to the start'
+// The next video can be set directly
+video2.options = {
+  choices: { // By displaying "choices"... or forcing them through
+    [video3.uid]: 'troikating...'
   }
 }
 
+video3.options = {
+  fallback: video4.uid // Or seamlessly
+}
 
-// Add all videoItems to the src map
+
+// Or setting everything up, for a better control
+video4.options = {
+  choices: {
+    [video5.uid]: 'Trouble, oh trouble',
+  },
+  fallback: video6.uid
+}
+
+video6.options = {
+  choices: {
+    [video3.uid]: 'A troiKat',
+    [video3.uid]: 'The troiKat now?',
+    [video4.uid]: '¯\_(ツ)_/¯',
+  },
+  fallback: video2.uid // And more twisted plays
+}
+
+
+/**
+ * Create a model object.
+ * Each model attribute is a videoUID of value: the video itself
+ */
 let model = {
-  [vid1.uid]: vid1,
-  [vid2.uid]: vid2,
-  [vid3.uid]: vid3,
-  [vid4.uid]: vid4,
-  [vid5.uid]: vid5,
-  [vid6.uid]: vid6,
-  [vid7.uid]: vid7
+  [video1.uid]: video1,
+  [video2.uid]: video2,
+  [video3.uid]: video3,
+  [video4.uid]: video4,
+  [video5.uid]: video5,
+  [video6.uid]: video6,
+  [video7.uid]: video7
 };
 
 document.getElementById("ivid-sample").setAttribute("model", JSON.stringify(model));
