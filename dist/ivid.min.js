@@ -1,5 +1,5 @@
 /**
- * @ividjs/ivid - v1.0.2
+ * @ividjs/ivid - v1.0.3
  * Copyright 2019 Alex Perez (alxpez)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
