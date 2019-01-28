@@ -133,17 +133,21 @@ const setupControlsTemplate = () => {
   fullscreenClickCallback
 ) => {
 
+  controls.progress.progressWrapper.ontouchstart = (e) => progressClickCallback(e);
   controls.progress.progressWrapper.onclick = (e) => progressClickCallback(e);
 
+  controls.playButton.ontouchstart = () => playClickCallback();
   controls.playButton.onclick = () => playClickCallback();
 
   controls.volume.volumeWrapper.onmouseover = () => volumeHoverCallback();
   controls.volume.volumeWrapper.onmouseleave = () => volumeLeaveCallback();
+  controls.volume.volumeButton.ontouchstart = () => volumeClickCallback();
   controls.volume.volumeButton.onclick = () => volumeClickCallback();
 
   controls.volume.volumeSlider.oninput = (e) => volumeChangeCallback(e);
   controls.volume.volumeSlider.onchange = (e) => volumeChangeCallback(e);
 
+  controls.fullscreenButton.ontouchstart = () => fullscreenClickCallback();
   controls.fullscreenButton.onclick = () => fullscreenClickCallback();
 }
 

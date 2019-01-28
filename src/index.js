@@ -88,6 +88,7 @@ class Ivid extends HTMLElement {
       onVideoClick: {
         value: () => {
           this.togglePlay();
+          this.onShowControls();
         }
       },
       onLoadedMetadata: {

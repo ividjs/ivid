@@ -40,6 +40,7 @@ const renderChoicesTemplate = (choicesTpl, videoItem, choiceClickCallback) => {
       button.setAttribute('class', 'ivid__choice-button');
       button.id = choiceUid;
       button.innerHTML = choices[choiceUid];
+      button.ontouchstart = () => choiceClickCallback(choiceUid);
       button.onclick = () => choiceClickCallback(choiceUid);
       
       choicesTpl.appendChild(button);

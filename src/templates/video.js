@@ -51,6 +51,7 @@ const renderVideoTemplate = (
   if(videoAttrs.poster) videoTpl.poster = videoAttrs.poster;
   if(videoAttrs.preload) videoTpl.preload = videoAttrs.preload;
 
+  videoTpl.ontouchstart = (e) => videoClickCallback(e);
   videoTpl.onclick = (e) => videoClickCallback(e);
   videoTpl.onloadedmetadata = () => loadedMetadataCallback();
   if(timeUpdateCallback) videoTpl.ontimeupdate = () => timeUpdateCallback();
