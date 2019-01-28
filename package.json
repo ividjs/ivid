@@ -9,7 +9,7 @@
     "build:style": "minify ./src/style.css > ./dist/ivid.min.css",
     "build:script": "webpack --config webpack.config.js",
     "licenser": "node licenser.js",
-    "publish": "npm run build && npm publish"
+    "publisher": "npm run build && npm publish"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
