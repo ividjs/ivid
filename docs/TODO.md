@@ -5,5 +5,5 @@
   - [x] iVid `model`
   - [x] iVid `styles`
 
-- [ ] Add touch support
+- [x] Add touch support
 - [ ] Add tracks support (subs, audio)

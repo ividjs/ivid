@@ -136,13 +136,13 @@ const setupControlsTemplate = () => {
   controls.progress.progressWrapper.ontouchstart = (e) => progressClickCallback(e);
   controls.progress.progressWrapper.onclick = (e) => progressClickCallback(e);
 
-  controls.playButton.ontouchstart = () => playClickCallback();
-  controls.playButton.onclick = () => playClickCallback();
+  controls.playButton.ontouchstart = (e) => playClickCallback(e);
+  controls.playButton.onclick = (e) => playClickCallback(e);
 
   controls.volume.volumeWrapper.onmouseover = () => volumeHoverCallback();
   controls.volume.volumeWrapper.onmouseleave = () => volumeLeaveCallback();
-  controls.volume.volumeButton.ontouchstart = () => volumeClickCallback();
-  controls.volume.volumeButton.onclick = () => volumeClickCallback();
+  controls.volume.volumeButton.ontouchstart = (e) => volumeClickCallback(e);
+  controls.volume.volumeButton.onclick = (e) => volumeClickCallback(e);
 
   controls.volume.volumeSlider.oninput = (e) => volumeChangeCallback(e);
   controls.volume.volumeSlider.onchange = (e) => volumeChangeCallback(e);

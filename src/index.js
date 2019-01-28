@@ -53,12 +53,14 @@ class Ivid extends HTMLElement {
         }
       },
       onPlayClick: {
-        value: () => {
+        value: (event) => {
+          event.preventDefault();
           this.togglePlay();
         }
       },
       onVolumeClick: {
-        value: () => {
+        value: (event) => {
+          event.preventDefault();
           this.toggleMute();
         }
       },
@@ -86,7 +88,8 @@ class Ivid extends HTMLElement {
         }
       },
       onVideoClick: {
-        value: () => {
+        value: (event) => {
+          event.preventDefault();
           this.togglePlay();
           this.onShowControls();
         }
@@ -123,7 +126,6 @@ class Ivid extends HTMLElement {
 
           if (videoTpl.duration - videoTpl.currentTime <= 1) {
             let fallback = null;
-
             if (s.next)
               fallback = s.next;
             else if (videoItem.options)
@@ -145,7 +147,8 @@ class Ivid extends HTMLElement {
         }
       },
       onChoiceSelected: {
-        value: (choiceUid) => {
+        value: (choiceUid, event) => {
+          if (event) event.preventDefault();
           let choices = this.state.choicesTemplate;
 
           this.setAttribute('next', choiceUid);
