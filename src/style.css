@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- 
+
 * { 
   margin: 0; 
   padding: 0; 
@@ -71,7 +71,7 @@
 .ivid__choice-button {
   cursor: pointer;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: large;
+  font-size: 1.8em;
   font-weight: normal;
   border: none;
   color: white;
@@ -108,7 +108,7 @@
 .ivid__ctrls-wrapper {
   margin: auto;
   bottom: 0;
-  width: 98%;
+  width: 96%;
 }
 
 
@@ -121,10 +121,8 @@
   align-items: center;
   background-color: transparent;
   cursor: pointer;
-  height: 2em;
+  height: 4.2em;
   width: 100%;
-  left: 1.8em;
-  right: 1.8em;
 }
 
 .ivid__ctrls-progress > progress {
@@ -171,8 +169,6 @@
 .ivid__ctrls-buttons-wrapper {
   display: flex;
   align-items: center;
-  left: 1.8em;
-  right: 1.8em;
   width: 100%;
   margin-bottom: 1.3em;
 }
@@ -181,6 +177,7 @@
   cursor: pointer;
   color: white;
   border: none;
+  font-size: 2.8em !important;
   margin: 0 0.3em;
 }
 .ivid__ctrls-button[data-state]::before {
@@ -233,10 +230,7 @@
 .ivid_ctrls-time {
   color: white;
   font-family: Arial, Helvetica, sans-serif;
-  width: 20%;
-  margin: 0.7em;
-}
-
-.ivid__ctrls-spacer {
   width: 100%;
+  margin: 0 0.6em;
+  font-size: 1.8em;
 }
