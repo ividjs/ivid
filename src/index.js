@@ -47,7 +47,7 @@ class Ivid extends HTMLElement {
       onProgressClick: {
         value: (event) => {
           let videoTpl = this.state.videoTemplate;
-          let prog = event.target;
+          let prog = this.state.controls.progress.progressWrapper;
           let pos = (event.pageX - (prog.offsetLeft + prog.offsetParent.offsetLeft)) / prog.offsetWidth;
           videoTpl.currentTime = pos * videoTpl.duration;
         }
