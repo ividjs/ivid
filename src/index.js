@@ -110,7 +110,7 @@ class Ivid extends HTMLElement {
           let videoTpl = s.videoTemplate;
           let controls = this.state.controls;
 
-          controls.time.innerHTML = `${secondsToHms(videoTpl.currentTime)}  /  ${secondsToHms(videoTpl.duration)}`;
+          controls.time.innerHTML = `${secondsToHms(videoTpl.currentTime || 0)}  /  ${secondsToHms(videoTpl.duration || 0)}`;
           controls.progress.progressValue.style.width = Math.floor((videoTpl.currentTime / videoTpl.duration) * 100) + "%";
 
           if (s.choicesTemplate.hasAttribute('data-state') && videoItem.options && videoItem.options.choices) {
