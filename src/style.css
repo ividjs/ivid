@@ -78,12 +78,18 @@
   background-color: transparent;
   width: 100%;
   height: 5.7em;
+  border-top: hidden 0 transparent;
+  border-bottom: hidden 0 transparent;
+  transition:
+    border-top 0.23s ease-in-out,
+    border-bottom 0.23s ease-in-out;
 }
 .ivid__choice-button:hover {
   background-image: radial-gradient(rgba(204,204,204,0.47), transparent, transparent);
 }
 .ivid__choice-button[data-state=selected] {
-  background-image: radial-gradient(rgba(204,204,204,0.78), transparent, transparent);
+  border-top: solid 0.2em transparent;
+  border-bottom: solid 0.2em white;
 }
 
 
@@ -125,45 +131,32 @@
   width: 100%;
 }
 
-.ivid__ctrls-progress > progress {
-  display: block;
+.ivid__ctrls-progress-bg {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 15%;
-  margin-top: 0.2em;
-  margin-top: 0.125em;
-  border: none;
-  overflow: hidden;
-  -moz-border-radius: 0.2em;
-  -webkit-border-radius: 0.2em;
   border-radius: 0.2em;
-  color: red;
+  background-color: rgba(255, 255, 255, 0.54);
 }
-.ivid__ctrls-progress > progress:hover {
+.ivid__ctrls-progress-bg:hover{
   height: 20%;
 }
-.ivid__ctrls-progress > progress[data-state="pollyfill"] {
-  background-color: #ccc;
-}
 
-.ivid__ctrls-progress > span {
-  display: none;
- }
-.ivid__ctrls-progress > span[data-state=pollyfill] {
+.ivid__ctrls-progress-value{
   display: inline-block;
   background-color: red;
-  height: 15%;	
-}
-.ivid__ctrls-progress > span[data-state=pollyfill]:hover {
-  height: 20%;	
+  border-radius: 0.2em 0 0 0.2em;
+  height: 100%;	
 }
 
-.ivid__ctrls-progress > progress::-moz-progress-bar {
+.ivid__ctrls-progress-trackball{
+  display: inline-block;
   background-color: red;
+  border-radius: 50%;
+  height: 1.4em;
+  width: 1.4em;
 }
-.ivid__ctrls-progress > progress::-webkit-progress-value {
-  background-color: red;
-}
-/* PROGRESS END */
 
 
 .ivid__ctrls-buttons-wrapper {

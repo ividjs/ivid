@@ -28,16 +28,19 @@ const setupControlsTemplate = () => {
   let progressWrapper = document.createElement('div');
   progressWrapper.setAttribute('class', 'ivid__ctrls-progress');
 
-  let progressElement = document.createElement('progress');
-  if (!supportsProgress()) progressElement.setAttribute('data-state', 'pollyfill');
+  let progressBackground = document.createElement('div');
+  progressBackground.setAttribute('class', 'ivid__ctrls-progress-bg');
 
   let progressValue = document.createElement('span');
-  if (!supportsProgress()) progressValue.setAttribute('data-state', 'pollyfill');
+  progressValue.setAttribute('class', 'ivid__ctrls-progress-value');
+
+  let progressTrackball = document.createElement('div');
+  progressTrackball.setAttribute('class', 'ivid__ctrls-progress-trackball');
 
   let progress = {
     progressWrapper,
-    progressElement,
-    progressValue
+    progressValue,
+    progressTrackball,
   }
 
   // ---
@@ -86,8 +89,9 @@ const setupControlsTemplate = () => {
 
 
   // Contruct the template
-  progressWrapper.appendChild(progressElement);
-  progressWrapper.appendChild(progressValue);
+  progressBackground.appendChild(progressValue);
+  progressBackground.appendChild(progressTrackball);
+  progressWrapper.appendChild(progressBackground);
 
   volumeWrapper.appendChild(volumeButton);
   volumeWrapper.appendChild(volumeSlider)

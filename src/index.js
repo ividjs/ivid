@@ -98,10 +98,9 @@ class Ivid extends HTMLElement {
         value: () => {
           let controls = this.state.controls;
           let videoTpl = this.state.videoTemplate;
-          controls.progress.progressElement.setAttribute('max', videoTpl.duration);
           controls.volume.volumeSlider.setAttribute('value', videoTpl.volume * 100);
           this.changeButtonState('mute');
-          this.changeButtonState('play');
+          this.changeButtonState('pause');
         }
       },
       onTimeUpdate: {
@@ -112,7 +111,6 @@ class Ivid extends HTMLElement {
           let controls = this.state.controls;
 
           controls.time.innerHTML = `${secondsToHms(videoTpl.currentTime)}  /  ${secondsToHms(videoTpl.duration)}`;
-          controls.progress.progressElement.value = videoTpl.currentTime;
           controls.progress.progressValue.style.width = Math.floor((videoTpl.currentTime / videoTpl.duration) * 100) + "%";
 
           if (s.choicesTemplate.hasAttribute('data-state') && videoItem.options && videoItem.options.choices) {
