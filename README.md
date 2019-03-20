@@ -7,11 +7,11 @@
 </br>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@ividjs/ivid">
+  <a href="https://www.npmjs.com/package/@ividjs/ivid" title="npm published">
     <img src="https://img.shields.io/badge/published-CB3837.svg?style=for-the-badge&logo=npm&longCache=true" alt="npm-published" style="max-width:100%;">
   </a>
   <img src="https://img.shields.io/badge/vanilla-black.svg?style=for-the-badge&logo=javascript&longCache=true" alt="vanillajs" style="max-width:100%;">
-  <a href="https://www.webcomponents.org/element/@ividjs/ivid">
+  <a href="https://www.webcomponents.org/element/@ividjs/ivid" title="webcomponents.org published">
     <img src="https://img.shields.io/badge/published-288fcd.svg?style=for-the-badge&logo=webcomponents.org&logoColor=white&longCache=true" alt="webcomponents-publised" style="max-width:100%;">
   </a>
 </p>
