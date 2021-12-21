@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="180" src="https://vectr.com/alxpez/b1ZFR52OL5.svg" alt="ivid-logo">
+  <img width="180" src="https://raw.githubusercontent.com/ividjs/ivid-assets/master/ivid.svg" alt="ivid-logo">
 </p>
 <h1 align="center">IVID</h1>
 <p align="center">< <b>i</b>nteractive <b>vid</b>eo player ></p>
